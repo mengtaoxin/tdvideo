@@ -2,15 +2,15 @@
 
 Production is published only from GitHub Actions (Vercel CLI). The app is a **static Vite SPA**; there are no Vercel Functions or server runtime.
 
-| Setting        | Value                                     |
-| -------------- | ----------------------------------------- |
-| Framework      | Vite                                      |
-| Install        | `npm ci` (Node **>=24**)                  |
-| Build          | `npm run build` → `dist/`                 |
-| Hosting        | Static files + SPA fallback (Vite preset) |
-| Production URL | `https://tdvideo.smt.sh` (Vercel + DNS)   |
+| Setting        | Value                                                                 |
+| -------------- | --------------------------------------------------------------------- |
+| Framework      | Vite                                                                  |
+| Install        | `npm ci` (Node **>=24**)                                              |
+| Build          | `npm run build` → `dist/`                                             |
+| Hosting        | Static files; `vercel.json` rewrites → `index.html` for client routes |
+| Production URL | `https://tdvideo.smt.sh` (Vercel + DNS)                               |
 
-Repo config: [`vercel.json`](../vercel.json) (framework, build/output paths, Git auto-deploy off). Workflow: [`.github/workflows/vercel-production.yml`](../.github/workflows/vercel-production.yml) (`push` to `main`, `workflow_dispatch`).
+Repo config: [`vercel.json`](../vercel.json) (framework, build/output paths, SPA rewrite, Git auto-deploy off). Workflow: [`.github/workflows/vercel-production.yml`](../.github/workflows/vercel-production.yml) (`push` to `main`, `workflow_dispatch`).
 
 ## GitHub secrets
 
