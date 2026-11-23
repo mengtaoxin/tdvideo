@@ -1,5 +1,6 @@
 export { commentsVisibleAt, fetchBulletComments, parseBulletComments } from "./bullets";
 export type { BulletComment } from "./bullets";
+export { STAGE_ASPECT_RATIO, availableStageHeight, fitStageSize } from "./fitStageSize";
 export { isHlsUrl } from "./media";
 export {
   ALL_VIDEOS_PLAYLIST_ID,

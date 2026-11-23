@@ -1,11 +1,12 @@
 import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles";
 import { HlsJsVideo } from "@videojs/react/media/hlsjs-video";
 import { Video, VideoPlayer, VideoSkin } from "@videojs/react/video";
 import "@videojs/react/video/skin.css";
-import type { ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 import { selectDefaultSubtitle, type SubtitleTrack } from "@/lib/configs";
-import { isHlsUrl, type BulletComment } from "@/lib/playback";
+import { availableStageHeight, fitStageSize, isHlsUrl, type BulletComment } from "@/lib/playback";
 
 import { BulletCommentOverlay } from "./BulletCommentOverlay";
 import { HistoryProgressSync, HistoryResumeSeek, type HistoryTarget } from "./HistoryProgressSync";
@@ -63,6 +64,59 @@ export function VideoJsStage({
   historyTarget: HistoryTarget;
   resumeProgress: number;
 }) {
+  const theme = useTheme();
+  const widthRef = useRef<HTMLDivElement>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
+  const [frameSize, setFrameSize] = useState<{ width: number; height: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const widthEl = widthRef.current;
+    if (!widthEl) {
+      return undefined;
+    }
+
+    const toolbarGap = Number.parseFloat(theme.spacing(2));
+    const bottomInset = Number.parseFloat(theme.spacing(3));
+
+    function measure() {
+      const el = widthRef.current;
+      if (!el) {
+        return;
+      }
+      const availableWidth = el.clientWidth;
+      const stageTop = el.getBoundingClientRect().top;
+      const toolbarHeight = toolbarRef.current?.offsetHeight ?? 0;
+      const availableHeight = availableStageHeight({
+        viewportHeight: window.innerHeight,
+        stageTop,
+        toolbarHeight,
+        toolbarGap,
+        bottomInset,
+      });
+      setFrameSize(fitStageSize(availableWidth, availableHeight));
+    }
+
+    measure();
+
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure);
+      return () => {
+        window.removeEventListener("resize", measure);
+      };
+    }
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(widthEl);
+    if (toolbarRef.current) {
+      observer.observe(toolbarRef.current);
+    }
+    window.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [theme]);
+
   const hls = isHlsUrl(src);
   let media: ReactNode;
 
@@ -88,15 +142,22 @@ export function VideoJsStage({
     );
   }
 
+  const frameSx =
+    frameSize === null
+      ? { width: "100%", aspectRatio: "16 / 9" }
+      : { width: frameSize.width, height: frameSize.height };
+
   return (
     <VideoPlayer key={src} title={title}>
       <HistoryProgressSync key={historyTargetKey(historyTarget)} target={historyTarget} />
       <HistoryResumeSeek key={`resume:${resumeProgress}`} progress={resumeProgress} />
-      <Box sx={{ position: "relative" }}>
-        <VideoSkin style={{ aspectRatio: "16 / 9", width: "100%" }}>{media}</VideoSkin>
-        <BulletCommentOverlay comments={bulletComments} enabled={bulletCommentsEnabled} />
+      <Box ref={widthRef} sx={{ width: "100%", minWidth: 0 }}>
+        <Box sx={{ position: "relative", maxWidth: "100%", ...frameSx }}>
+          <VideoSkin style={{ width: "100%", height: "100%" }}>{media}</VideoSkin>
+          <BulletCommentOverlay comments={bulletComments} enabled={bulletCommentsEnabled} />
+        </Box>
       </Box>
-      <Box sx={{ mt: 2 }}>
+      <Box ref={toolbarRef} sx={{ mt: 2 }}>
         <PlaybackControls
           autoDisplaySubtitles={autoDisplaySubtitles}
           hasSubtitles={subtitles.length > 0}

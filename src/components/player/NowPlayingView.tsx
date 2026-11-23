@@ -185,7 +185,6 @@ export function NowPlayingView() {
               flex: 1,
               minWidth: 0,
               width: "100%",
-              maxWidth: { md: "50%" },
             }}
           >
             <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 1, minHeight: 40 }}>
