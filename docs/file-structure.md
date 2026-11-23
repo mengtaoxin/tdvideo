@@ -15,7 +15,9 @@ tdvideo/
 ├── index.html             # SPA shell
 ├── public/                # Static assets (default configs, fixtures)
 ├── e2e/                   # Playwright tests
-├── docs/                  # Project docs (this folder)
+├── .github/workflows/     # CI/CD (Vercel production deploy)
+├── vercel.json            # Vercel framework/build/output; Git auto-deploy off
+├── docs/                  # Project docs (deployment.md, this folder)
 └── src/
     ├── main.tsx           # Bootstrap
     ├── App.tsx            # Root tree (theme / providers)

@@ -42,3 +42,6 @@ playwright-report/
 
 .evolving
 .task-divide-and-conquer
+
+# Vercel CLI (vercel pull / link)
+.vercel

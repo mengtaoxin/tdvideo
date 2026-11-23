@@ -36,6 +36,10 @@ Unit, coverage, and e2e: see [testing.md](./testing.md).
 | ---------------- | -------------------------------------------------------------------- |
 | `npm run verify` | Full gate: `check` + coverage + e2e (same pieces as evolving verify) |
 
+## Deploy
+
+Production hosting on Vercel via GitHub Actions: see [deployment.md](./deployment.md).
+
 ## Agent workflow
 
 ```bash
