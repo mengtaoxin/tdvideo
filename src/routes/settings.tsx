@@ -69,9 +69,6 @@ function SettingsPage() {
 
   return (
     <>
-      <Typography component="h1" variant="h4" gutterBottom>
-        {t("settings.title")}
-      </Typography>
       <Typography color="text.secondary" sx={{ mb: 2 }}>
         {t("settings.description")}
       </Typography>

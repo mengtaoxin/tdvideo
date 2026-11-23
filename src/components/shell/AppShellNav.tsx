@@ -6,12 +6,14 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
-import { Link as RouterLink } from "@tanstack/react-router";
+import Typography from "@mui/material/Typography";
+import { Link as RouterLink, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { FEEDBACK_URL } from "@/constants";
+import { APP_NAME, FEEDBACK_URL } from "@/constants";
+import { routeCrumbLabelKey } from "@/lib/nav";
 
 import { LanguageMenu } from "./LanguageMenu";
 import { CHROME_ITEMS, NAV_GAP_PX, iconFor, type NavChromeItem } from "./navChrome";
@@ -19,6 +21,8 @@ import { useNavOverflow } from "./useNavOverflow";
 
 export function AppShellNav() {
   const { t, i18n } = useTranslation();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const crumbKey = routeCrumbLabelKey(pathname);
   const { rowRef, measureRefs, moreMeasureRef, visibleCount } = useNavOverflow(CHROME_ITEMS.length);
   const [moreAnchor, setMoreAnchor] = useState<null | HTMLElement>(null);
   const [langAnchor, setLangAnchor] = useState<null | HTMLElement>(null);
@@ -141,7 +145,56 @@ export function AppShellNav() {
 
   return (
     <AppBar position="static" color="default" elevation={1}>
-      <Toolbar sx={{ gap: 1, justifyContent: "flex-end" }}>
+      <Toolbar sx={{ gap: 2, justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            minWidth: 0,
+            flexShrink: 1,
+          }}
+        >
+          <Button
+            component={RouterLink}
+            to="/"
+            color="inherit"
+            size="small"
+            sx={{
+              gap: 1,
+              px: 1,
+              minWidth: 0,
+              textTransform: "none",
+              fontWeight: 600,
+            }}
+          >
+            <Box
+              component="img"
+              src="/favicon.svg"
+              alt=""
+              sx={{ width: 24, height: 24, display: "block", flexShrink: 0 }}
+            />
+            {APP_NAME}
+          </Button>
+          {crumbKey ? (
+            <Typography
+              component="span"
+              variant="body2"
+              color="text.secondary"
+              aria-label={t("nav.currentPage")}
+              aria-current="page"
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                minWidth: 0,
+              }}
+            >
+              {t(crumbKey)}
+            </Typography>
+          ) : null}
+        </Box>
+
         <Box
           ref={rowRef}
           sx={{

@@ -58,9 +58,6 @@ function ContinueWatchingPage() {
 
   return (
     <Stack spacing={2}>
-      <Typography component="h1" variant="h4">
-        {t("continueWatching.title")}
-      </Typography>
       {history !== null && history.length === 0 ? (
         <Typography color="text.secondary">{t("continueWatching.empty")}</Typography>
       ) : null}

@@ -26,9 +26,6 @@ function VideosPage() {
 
   return (
     <>
-      <Typography component="h1" variant="h4" gutterBottom>
-        {t("videos.title")}
-      </Typography>
       <ConfigsStatusBanner />
       {status === "ready" && videos && videos.length === 0 ? (
         <Typography color="text.secondary">{t("videos.empty")}</Typography>

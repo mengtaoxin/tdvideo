@@ -29,9 +29,6 @@ function PlaylistsPage() {
 
   return (
     <>
-      <Typography component="h1" variant="h4" gutterBottom>
-        {t("playlists.title")}
-      </Typography>
       <ConfigsStatusBanner />
       {status === "ready" && playlists && playlists.length === 0 ? (
         <Typography color="text.secondary">{t("playlists.empty")}</Typography>

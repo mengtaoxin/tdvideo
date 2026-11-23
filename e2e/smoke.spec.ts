@@ -19,19 +19,17 @@ test.describe("tdvideo smoke", () => {
     const cases = [
       {
         link: "Now Playing",
+        crumb: "Now Playing",
         marker: { role: "link" as const, name: "Browse videos" },
       },
-      { link: "Videos", marker: { role: "heading" as const, name: "Videos" } },
-      { link: "Playlists", marker: { role: "heading" as const, name: "Playlists" } },
-      { link: "Settings", marker: { role: "heading" as const, name: "Settings" } },
+      { link: "Videos", crumb: "Videos" },
+      { link: "Playlists", crumb: "Playlists" },
+      { link: "Settings", crumb: "Settings" },
+      { link: "Continue watching", crumb: "Continue watching" },
+      { link: "About", crumb: "About", overflow: true },
       {
-        link: "Continue watching",
-        marker: { role: "heading" as const, name: "Continue watching" },
-        overflow: true,
-      },
-      { link: "About", marker: { role: "heading" as const, name: "About" }, overflow: true },
-      {
-        link: "Home",
+        brand: true as const,
+        crumb: "Home",
         marker: {
           role: "heading" as const,
           name: "One read-only JSON file is your whole video library",
@@ -41,13 +39,18 @@ test.describe("tdvideo smoke", () => {
 
     for (const item of cases) {
       const banner = page.getByRole("banner");
-      if ("overflow" in item && item.overflow) {
+      if ("brand" in item && item.brand) {
+        await banner.getByRole("link", { name: "tdvideo" }).click();
+      } else if ("overflow" in item && item.overflow) {
         await banner.getByRole("button", { name: "More" }).click();
         await page.getByRole("menuitem", { name: item.link }).click();
       } else {
         await banner.getByRole("link", { name: item.link }).click();
       }
-      await expect(page.getByRole(item.marker.role, { name: item.marker.name })).toBeVisible();
+      await expect(banner.getByLabel("Current page")).toHaveText(item.crumb);
+      if ("marker" in item) {
+        await expect(page.getByRole(item.marker.role, { name: item.marker.name })).toBeVisible();
+      }
     }
   });
 

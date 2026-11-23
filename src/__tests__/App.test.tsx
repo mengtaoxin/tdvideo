@@ -118,8 +118,13 @@ describe("App shell", () => {
     const user = userEvent.setup();
     await renderAt("/");
     const nav = await screen.findByRole("banner");
-    const visibleRoutes = NAV_ITEMS.slice(0, 5);
-    const overflowRoutes = NAV_ITEMS.slice(5);
+    const primaryRoutes = NAV_ITEMS.filter((item) => item.to !== "/");
+    const visibleRoutes = primaryRoutes.slice(0, 5);
+    const overflowRoutes = primaryRoutes.slice(5);
+
+    expect(within(nav).getByRole("link", { name: "tdvideo" })).toHaveAttribute("href", "/");
+    expect(within(nav).queryByRole("link", { name: "Home" })).not.toBeInTheDocument();
+    expect(within(nav).getByLabelText("Current page")).toHaveTextContent("Home");
 
     for (const item of visibleRoutes) {
       expect(within(nav).getByRole("link", { name: i18n.t(item.labelKey) })).toHaveAttribute(
@@ -138,6 +143,15 @@ describe("App shell", () => {
     }
     expect(screen.getByRole("menuitem", { name: "Feedback" })).toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: "Language" })).toBeInTheDocument();
+  });
+
+  it("shows the current route name as a non-interactive crumb in the chrome", async () => {
+    await renderAt("/videos");
+    const nav = await screen.findByRole("banner");
+    const crumb = within(nav).getByLabelText("Current page");
+    expect(crumb).toHaveTextContent("Videos");
+    expect(within(crumb).queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Videos" })).not.toBeInTheDocument();
   });
 
   it("opens the Feedback URL only after confirm", async () => {
@@ -167,11 +181,13 @@ describe("App shell", () => {
     await renderAt("/");
     const nav = await screen.findByRole("banner");
     const toolbar = nav.querySelector(".MuiToolbar-root");
-    const home = within(nav).getByRole("link", { name: "Home" });
+    const brand = within(nav).getByRole("link", { name: "tdvideo" });
+    const nowPlaying = within(nav).getByRole("link", { name: "Now Playing" });
 
-    expect(toolbar).toHaveStyle({ justifyContent: "flex-end" });
-    expect(home.querySelector("svg")).toBeTruthy();
-    expect(getComputedStyle(home).textTransform).toBe("none");
+    expect(toolbar).toHaveStyle({ justifyContent: "space-between" });
+    expect(brand.querySelector("img")).toHaveAttribute("src", "/favicon.svg");
+    expect(nowPlaying.querySelector("svg")).toBeTruthy();
+    expect(getComputedStyle(nowPlaying).textTransform).toBe("none");
     expect(within(nav).queryByRole("combobox")).not.toBeInTheDocument();
     expect(within(nav).getByRole("button", { name: "More" })).toBeInTheDocument();
   });
@@ -185,7 +201,8 @@ describe("App shell", () => {
     await user.click(await screen.findByRole("menuitem", { name: "Language" }));
     await user.click(await screen.findByRole("menuitem", { name: "中文" }));
 
-    expect(await screen.findByRole("link", { name: "首页" })).toBeInTheDocument();
+    expect(await within(nav).findByLabelText("当前页面")).toHaveTextContent("首页");
+    expect(within(nav).getByRole("link", { name: "tdvideo" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "正在播放" })).toBeInTheDocument();
     await user.click(within(nav).getByRole("button", { name: "更多" }));
     expect(await screen.findByRole("menuitem", { name: "反馈" })).toBeInTheDocument();
@@ -335,20 +352,23 @@ describe("App shell", () => {
   it("shows continue watching as a nav route with history entries", async () => {
     await upsertHistoryEntry({ type: "video", id: "demo", progress: 125 });
     await renderAt("/continue-watching");
-    expect(await screen.findByRole("heading", { name: "Continue watching" })).toBeInTheDocument();
+    const nav = await screen.findByRole("banner");
+    expect(within(nav).getByLabelText("Current page")).toHaveTextContent("Continue watching");
+    expect(screen.queryByRole("heading", { name: "Continue watching" })).not.toBeInTheDocument();
     expect(await screen.findByText("Demo Video")).toBeInTheDocument();
     expect(screen.getByText(/Video · 02:05/)).toBeInTheDocument();
   });
 
   it("shows an empty state on Continue watching when history is empty", async () => {
     await renderAt("/continue-watching");
-    expect(await screen.findByRole("heading", { name: "Continue watching" })).toBeInTheDocument();
     expect(await screen.findByText("No watching history yet.")).toBeInTheDocument();
   });
 
   it("shows About app name, description, version, and repo link", async () => {
     await renderAt("/about");
-    expect(await screen.findByRole("heading", { name: "About" })).toBeInTheDocument();
+    const nav = await screen.findByRole("banner");
+    expect(within(nav).getByLabelText("Current page")).toHaveTextContent("About");
+    expect(screen.queryByRole("heading", { name: "About" })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "tdvideo" })).toBeInTheDocument();
     expect(screen.getByText("Frontend-only online video player.")).toBeInTheDocument();
     expect(screen.getByText("Version 0.1.0")).toBeInTheDocument();
