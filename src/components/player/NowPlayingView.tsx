@@ -180,7 +180,14 @@ export function NowPlayingView() {
           spacing={3}
           sx={{ alignItems: { md: "flex-start" } }}
         >
-          <Box sx={{ flex: 1, minWidth: 0, width: "100%" }}>
+          <Box
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              width: "100%",
+              maxWidth: { md: "50%" },
+            }}
+          >
             <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 1, minHeight: 40 }}>
               <Typography component="h2" variant="h5" sx={{ flex: 1, minWidth: 0 }}>
                 {video.title}
