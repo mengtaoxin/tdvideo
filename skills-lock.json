@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "skills": {
+    "cursor-local-best-practices": {
+      "source": "mengtaoxin/agent-kit",
+      "commit": "80dd2c75926f66ad71f56b8f10c1ba78f5952140",
+      "sourceType": "github",
+      "skillPath": "skills/cursor-local-best-practices/SKILL.md",
+      "computedHash": "41880ecd955775bb3629984744276788d93f6ea11646547f31feb837ccde65bc",
+      "installMode": "copy"
+    },
+    "javascript-typescript-best-practices": {
+      "source": "mengtaoxin/agent-kit",
+      "commit": "80dd2c75926f66ad71f56b8f10c1ba78f5952140",
+      "sourceType": "github",
+      "skillPath": "skills/javascript-typescript-best-practices/SKILL.md",
+      "computedHash": "545489140c69bf32e3b57a4eb747645e65c5aed701e8da04389dd0b3c843ddf2",
+      "installMode": "copy"
+    },
+    "port-and-process-management": {
+      "source": "mengtaoxin/agent-kit",
+      "commit": "80dd2c75926f66ad71f56b8f10c1ba78f5952140",
+      "sourceType": "github",
+      "skillPath": "skills/port-and-process-management/SKILL.md",
+      "computedHash": "703d450e0c5248171db25ad6fed7401576c2cd0478f4a68219fa0e8e718e1a39",
+      "installMode": "copy"
+    },
+    "react-best-practices": {
+      "source": "mengtaoxin/agent-kit",
+      "commit": "80dd2c75926f66ad71f56b8f10c1ba78f5952140",
+      "sourceType": "github",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "computedHash": "0915e0b730c5dc881b20132c5de4f6f436e1b148e48dceba03a868b7afb96ee6",
+      "installMode": "copy"
+    },
+    "task-divide-and-conquer": {
+      "source": "mengtaoxin/agent-kit",
+      "commit": "80dd2c75926f66ad71f56b8f10c1ba78f5952140",
+      "sourceType": "github",
+      "skillPath": "skills/task-divide-and-conquer/SKILL.md",
+      "computedHash": "a7d611ccfbd9574d163f5f0a3642d42b7e14be136617e03906c2a74c0b2e227f",
+      "installMode": "copy"
+    },
+    "test-driven-development": {
+      "source": "mengtaoxin/agent-kit",
+      "commit": "80dd2c75926f66ad71f56b8f10c1ba78f5952140",
+      "sourceType": "github",
+      "skillPath": "skills/test-driven-development/SKILL.md",
+      "computedHash": "aa80678a9a87fcefde554b75e5075605d604aa011881862aba7da2de8ad196e5",
+      "installMode": "copy"
+    }
+  }
+}
