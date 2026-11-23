@@ -15,7 +15,7 @@ export function catalogGalleryPosterHeightPx(
 }
 
 /**
- * How many fixed-width gallery items fit in one flex row.
+ * How many fixed-width gallery items fit in one flex row (no upper cap).
  * Matches CSS `flex-wrap` with `flex: 0 0 width` and a constant gap.
  */
 export function catalogGalleryColumnsForWidth(

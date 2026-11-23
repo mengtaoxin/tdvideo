@@ -18,11 +18,13 @@ describe("catalogGalleryColumnsForWidth", () => {
   const w = CATALOG_GALLERY_ITEM_WIDTH_PX;
   const g = CATALOG_GALLERY_GAP_PX;
 
-  it("fits four items on a wide content row", () => {
+  it("packs as many items as fit with no upper column cap", () => {
     expect(catalogGalleryColumnsForWidth(4 * w + 3 * g)).toBe(4);
+    expect(catalogGalleryColumnsForWidth(5 * w + 4 * g)).toBe(5);
+    expect(catalogGalleryColumnsForWidth(8 * w + 7 * g)).toBe(8);
   });
 
-  it("fits three, then two, then one as the row narrows", () => {
+  it("drops to three, then two, then one as the row narrows", () => {
     expect(catalogGalleryColumnsForWidth(3 * w + 2 * g)).toBe(3);
     expect(catalogGalleryColumnsForWidth(2 * w + g)).toBe(2);
     expect(catalogGalleryColumnsForWidth(w)).toBe(1);
