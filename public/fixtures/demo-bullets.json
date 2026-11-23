@@ -1,0 +1,5 @@
+[
+  { "time": 1, "text": "Hello from bullet comments" },
+  { "time": 4.5, "text": "Synced with playback time" },
+  { "time": 8, "text": "Toggle me from Now Playing" }
+]

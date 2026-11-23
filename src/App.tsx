@@ -1,0 +1,15 @@
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
+import { RouterProvider } from "@tanstack/react-router";
+
+import { router } from "./router";
+import { theme } from "./theme";
+
+export default function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  );
+}

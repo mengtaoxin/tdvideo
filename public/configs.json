@@ -1,0 +1,90 @@
+{
+  "videos": [
+    {
+      "id": "big-buck-bunny",
+      "title": "Big Buck Bunny",
+      "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "autoDisplaySubtitles": true,
+      "subtitles": [
+        {
+          "id": "bbb-en",
+          "title": "English",
+          "url": "/fixtures/demo-en.vtt",
+          "language": "en",
+          "default": true
+        },
+        {
+          "id": "bbb-zh",
+          "title": "中文",
+          "url": "/fixtures/demo-zh.vtt",
+          "language": "zh",
+          "default": false
+        }
+      ],
+      "bullet-comments": [
+        {
+          "id": "bbb-bullets",
+          "title": "Demo bullets",
+          "url": "/fixtures/demo-bullets.json"
+        }
+      ]
+    },
+    {
+      "id": "elephants-dream",
+      "title": "Elephants Dream",
+      "url": "https://media.w3.org/2010/05/video/movie_300.mp4",
+      "autoDisplaySubtitles": false,
+      "subtitles": [
+        {
+          "id": "ed-en",
+          "title": "English",
+          "url": "/fixtures/demo-en.vtt",
+          "language": "en",
+          "default": false
+        }
+      ],
+      "bullet-comments": []
+    },
+    {
+      "id": "sintel",
+      "title": "Sintel",
+      "url": "https://media.w3.org/2010/05/sintel/trailer.mp4",
+      "autoDisplaySubtitles": true,
+      "subtitles": [
+        {
+          "id": "sintel-zh",
+          "title": "中文",
+          "url": "/fixtures/demo-zh.vtt",
+          "language": "zh",
+          "default": true
+        },
+        {
+          "id": "sintel-en",
+          "title": "English",
+          "url": "/fixtures/demo-en.vtt",
+          "language": "en",
+          "default": true
+        }
+      ],
+      "bullet-comments": [
+        {
+          "id": "sintel-bullets",
+          "title": "Demo bullets",
+          "url": "/fixtures/demo-bullets.json"
+        }
+      ]
+    }
+  ],
+  "playlists": [
+    {
+      "id": "demo-playlist",
+      "title": "Demo playlist",
+      "videos": ["big-buck-bunny", "elephants-dream", "sintel"]
+    },
+    {
+      "id": "short-list",
+      "title": "Short list",
+      "videos": ["sintel", "missing-video-id", "big-buck-bunny"]
+    }
+  ]
+}

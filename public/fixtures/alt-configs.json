@@ -1,0 +1,19 @@
+{
+  "videos": [
+    {
+      "id": "alt-demo",
+      "title": "Alt Fixture Video",
+      "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "autoDisplaySubtitles": false,
+      "subtitles": [],
+      "bullet-comments": []
+    }
+  ],
+  "playlists": [
+    {
+      "id": "alt-playlist",
+      "title": "Alt Fixture Playlist",
+      "videos": ["alt-demo"]
+    }
+  ]
+}

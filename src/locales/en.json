@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "home": "Home",
+    "nowPlaying": "Now Playing",
+    "videos": "Videos",
+    "playlists": "Playlists",
+    "settings": "Settings",
+    "about": "About",
+    "language": "Language",
+    "feedback": "Feedback"
+  },
+  "home": {
+    "brand": "tdvideo",
+    "tagline": "Frontend video player",
+    "goToVideos": "Browse videos",
+    "goToPlaylists": "Browse playlists",
+    "continueWatching": "Continue watching",
+    "continueMeta": "{{type}} · {{progress}}",
+    "typeVideo": "Video",
+    "typeList": "Playlist"
+  },
+  "nowPlaying": {
+    "title": "Now Playing",
+    "empty": "Nothing is playing yet. Open a video or playlist to get started.",
+    "goToVideos": "Browse videos",
+    "goToPlaylists": "Browse playlists",
+    "subtitles": "Subtitles",
+    "subtitlesToggle": "Toggle subtitles",
+    "subtitleTrack": "Subtitle track",
+    "subtitlesOff": "Off",
+    "bulletComments": "Bullet comments",
+    "bulletCommentsToggle": "Toggle bullet comments",
+    "bulletLoadError": "Could not load bullet comments.",
+    "playlistSidebar": "Playlist",
+    "playlistPosition": "Item {{current}} of {{total}}",
+    "playlistItemIndex": "#{{index}}",
+    "missingItem": "The selected video or playlist is not in the loaded configs."
+  },
+  "videos": {
+    "title": "Videos",
+    "empty": "No videos in the loaded configs.",
+    "itemMeta": "id: {{id}} · subtitles: {{subtitleCount}} · bullet tracks: {{bulletCount}}"
+  },
+  "playlists": {
+    "title": "Playlists",
+    "empty": "No playlists in the loaded configs.",
+    "itemMeta": "id: {{id}} · {{count}} videos"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Configure the configs.json URL. Leave empty or use the default path to load /configs.json.",
+    "configsUrlLabel": "Configs URL",
+    "configsUrlHelp": "Default: {{defaultUrl}}",
+    "save": "Save and reload",
+    "reset": "Reset to default",
+    "reload": "Reload",
+    "loadedFrom": "Loaded configs from {{url}}"
+  },
+  "configs": {
+    "loading": "Loading configs…",
+    "errorTitle": "Could not load configs",
+    "errorFallback": "Unknown error while loading configs.",
+    "errorUrl": "Source: {{url}}"
+  },
+  "about": {
+    "title": "About",
+    "description": "Frontend-only online video player.",
+    "version": "Version {{version}}",
+    "repository": "Repository"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文"
+  }
+}

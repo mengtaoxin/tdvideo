@@ -90,12 +90,12 @@ the orchestrator instead of executing the subtask inline.
 
 ### Parent statuses
 
-| Status | Meaning |
-| --- | --- |
-| `In progress` | Created; subtasks remain |
-| `Completed` | All subtasks done, including the commit message offered to the user |
-| `Failed` | Task design problem found; reason recorded |
-| `Cancelled` | Stopped, usually by the user |
+| Status        | Meaning                                                             |
+| ------------- | ------------------------------------------------------------------- |
+| `In progress` | Created; subtasks remain                                            |
+| `Completed`   | All subtasks done, including the commit message offered to the user |
+| `Failed`      | Task design problem found; reason recorded                          |
+| `Cancelled`   | Stopped, usually by the user                                        |
 
 `Failed`, `Completed`, and `Cancelled` are terminal: never execute subtasks of
 such a task. A redesign means a new parent task (new file).
@@ -169,9 +169,9 @@ This conversation only plans. It does not implement subtask 2 itself.
 6. After the user confirms (for example yes / confirm / go ahead / continue):
    - If sub-agents are available, become the orchestrator and run the chain.
    - Otherwise reply with the fallback continue prompt.
-   If they decline or want changes, stop. Do not start the chain. On a
-   redesign request, create a new parent task (new file) rather than silently
-   rewriting this one.
+     If they decline or want changes, stop. Do not start the chain. On a
+     redesign request, create a new parent task (new file) rather than silently
+     rewriting this one.
 
 ## Mode B: run the next subtask
 

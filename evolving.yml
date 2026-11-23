@@ -1,0 +1,57 @@
+# Local progressive stages for @mengtaoxin/evolving.
+# Batch gates: `evolving run --tags gate` (aligns with npm run verify pieces).
+version: 1
+
+stages:
+  - id: orient
+    summary: >-
+      Read docs/file-structure.md only when adding/moving files or the entry file is unknown.
+      Skip when the path is known.
+    refs:
+      - docs/file-structure.md
+      - docs/tech-stack.md
+    skip_when: entry_file_known
+
+  - id: edit
+    summary: >-
+      Change code here. Red → Green with focused runs when behavior is in scope
+      (see docs/testing.md and the TDD skill). Docs-only or out-of-scope presentation
+      tweaks still finish with verify.
+    refs:
+      - docs/testing.md
+      - .agents/skills/test-driven-development/SKILL.md
+    tags: [needs-agent]
+    skip_when: docs_only
+
+  - id: prepare
+    tags: [gate]
+    commands:
+      - name: format
+        command: ["npm", "run", "--silent", "format"]
+      - name: lint:fix
+        command: ["npm", "run", "--silent", "lint:fix"]
+
+  - id: verify
+    tags: [gate]
+    commands:
+      - name: format:check
+        command: ["npm", "run", "--silent", "format:check"]
+      - name: lint
+        command: ["npm", "run", "--silent", "lint"]
+        showOutputOnSuccess: true
+      - name: type-check
+        command: ["npm", "run", "--silent", "type-check"]
+      - name: test:coverage
+        command: ["npm", "run", "--silent", "test:coverage"]
+      - name: test:e2e
+        command: ["npm", "run", "--silent", "test:e2e"]
+
+  - id: docs
+    summary: >-
+      Update the doc that owns the changed contract. Prefer existing docs under docs/;
+      do not mirror code lists — describe what is supported.
+    refs:
+      - docs/file-structure.md
+      - docs/commands.md
+      - docs/testing.md
+      - docs/tech-stack.md

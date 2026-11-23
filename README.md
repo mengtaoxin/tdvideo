@@ -1,16 +1,29 @@
-# React + Vite
+# tdvideo
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Frontend-only online video player (Vite + React + TypeScript). No backend in this repo.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Node >=24**
+- **`NODE_AUTH_TOKEN`** — GitHub Packages auth for `@mengtaoxin/*` (see `.npmrc`)
 
-## React Compiler
+## Quick start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+export NODE_AUTH_TOKEN=<github-pat-with-read:packages>
+npm install
+npm run dev
+```
 
-## Expanding the Oxlint configuration
+| Command          | Purpose                         |
+| ---------------- | ------------------------------- |
+| `npm run build`  | Type-check + production build   |
+| `npm run verify` | Lint, type-check, coverage, e2e |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Full command list, stack, testing, and layout: see [`docs/`](./docs/) (`commands.md`, `tech-stack.md`, `testing.md`, `file-structure.md`).
+
+Agents: start with `npx evolving explain` (see [`AGENTS.md`](./AGENTS.md)).
+
+## Repository
+
+https://github.com/mengtaoxin/tdvideo

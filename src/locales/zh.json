@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "home": "首页",
+    "nowPlaying": "正在播放",
+    "videos": "视频",
+    "playlists": "播放列表",
+    "settings": "设置",
+    "about": "关于",
+    "language": "语言",
+    "feedback": "反馈"
+  },
+  "home": {
+    "brand": "tdvideo",
+    "tagline": "前端视频播放器",
+    "goToVideos": "浏览视频",
+    "goToPlaylists": "浏览播放列表",
+    "continueWatching": "继续观看",
+    "continueMeta": "{{type}} · {{progress}}",
+    "typeVideo": "视频",
+    "typeList": "播放列表"
+  },
+  "nowPlaying": {
+    "title": "正在播放",
+    "empty": "当前没有播放内容。请打开视频或播放列表开始。",
+    "goToVideos": "浏览视频",
+    "goToPlaylists": "浏览播放列表",
+    "subtitles": "字幕",
+    "subtitlesToggle": "开关字幕",
+    "subtitleTrack": "字幕轨道",
+    "subtitlesOff": "关闭",
+    "bulletComments": "弹幕",
+    "bulletCommentsToggle": "开关弹幕",
+    "bulletLoadError": "无法加载弹幕。",
+    "playlistSidebar": "播放列表",
+    "playlistPosition": "第 {{current}} / {{total}} 项",
+    "playlistItemIndex": "#{{index}}",
+    "missingItem": "所选视频或播放列表不在已加载的配置中。"
+  },
+  "videos": {
+    "title": "视频",
+    "empty": "已加载的配置中没有视频。",
+    "itemMeta": "id：{{id}} · 字幕：{{subtitleCount}} · 弹幕轨道：{{bulletCount}}"
+  },
+  "playlists": {
+    "title": "播放列表",
+    "empty": "已加载的配置中没有播放列表。",
+    "itemMeta": "id：{{id}} · {{count}} 个视频"
+  },
+  "settings": {
+    "title": "设置",
+    "description": "配置 configs.json 的加载地址。留空或使用默认路径将加载 /configs.json。",
+    "configsUrlLabel": "配置地址",
+    "configsUrlHelp": "默认：{{defaultUrl}}",
+    "save": "保存并重新加载",
+    "reset": "恢复默认",
+    "reload": "重新加载",
+    "loadedFrom": "已从 {{url}} 加载配置"
+  },
+  "configs": {
+    "loading": "正在加载配置…",
+    "errorTitle": "无法加载配置",
+    "errorFallback": "加载配置时发生未知错误。",
+    "errorUrl": "来源：{{url}}"
+  },
+  "about": {
+    "title": "关于",
+    "description": "纯前端在线视频播放器。",
+    "version": "版本 {{version}}",
+    "repository": "代码仓库"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文"
+  }
+}
