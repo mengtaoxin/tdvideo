@@ -74,5 +74,11 @@
   "language": {
     "en": "English",
     "zh": "中文"
+  },
+  "feedback": {
+    "confirmTitle": "要去反馈吗？",
+    "confirmBody": "将在新标签页打开 GitHub 以提交 issue。",
+    "cancel": "取消",
+    "continue": "继续"
   }
 }

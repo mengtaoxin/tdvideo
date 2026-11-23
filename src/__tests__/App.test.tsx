@@ -61,7 +61,7 @@ describe("App shell", () => {
     expect(await screen.findByRole("heading", { name: "tdvideo" })).toBeInTheDocument();
   });
 
-  it("exposes all primary nav routes and the Feedback link", async () => {
+  it("exposes all primary nav routes and a Feedback action", async () => {
     await renderAt("/");
     const nav = await screen.findByRole("banner");
 
@@ -72,10 +72,27 @@ describe("App shell", () => {
       );
     }
 
-    expect(within(nav).getByRole("link", { name: "Feedback" })).toHaveAttribute(
-      "href",
-      FEEDBACK_URL,
-    );
+    expect(within(nav).getByRole("button", { name: "Feedback" })).toBeInTheDocument();
+  });
+
+  it("opens the Feedback URL only after confirm", async () => {
+    const user = userEvent.setup();
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+
+    await renderAt("/");
+    await user.click(await screen.findByRole("button", { name: "Feedback" }));
+
+    expect(await screen.findByRole("dialog", { name: "Leave feedback?" })).toBeInTheDocument();
+    expect(openSpy).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(screen.queryByRole("dialog", { name: "Leave feedback?" })).not.toBeInTheDocument();
+    expect(openSpy).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Feedback" }));
+    await user.click(await screen.findByRole("button", { name: "Continue" }));
+
+    expect(openSpy).toHaveBeenCalledWith(FEEDBACK_URL, "_blank", "noopener,noreferrer");
   });
 
   it("renders nav actions as left-aligned icon buttons without uppercase transform", async () => {
@@ -98,7 +115,7 @@ describe("App shell", () => {
 
     expect(await screen.findByRole("link", { name: "首页" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "正在播放" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "反馈" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "反馈" })).toBeInTheDocument();
   });
 
   it("shows the Now Playing empty-state CTAs", async () => {

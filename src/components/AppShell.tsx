@@ -11,6 +11,11 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -36,7 +41,7 @@ const ROUTE_ICONS: Record<(typeof NAV_ITEMS)[number]["to"], typeof HomeIcon> = {
 type NavChromeItem =
   | { id: string; kind: "route"; to: (typeof NAV_ITEMS)[number]["to"]; labelKey: string }
   | { id: string; kind: "language"; labelKey: string }
-  | { id: string; kind: "feedback"; labelKey: string; href: string };
+  | { id: string; kind: "feedback"; labelKey: string };
 
 const CHROME_ITEMS: NavChromeItem[] = [
   ...NAV_ITEMS.map((item) => ({
@@ -46,7 +51,7 @@ const CHROME_ITEMS: NavChromeItem[] = [
     labelKey: item.labelKey,
   })),
   { id: "language", kind: "language", labelKey: "nav.language" },
-  { id: "feedback", kind: "feedback", labelKey: "nav.feedback", href: FEEDBACK_URL },
+  { id: "feedback", kind: "feedback", labelKey: "nav.feedback" },
 ];
 
 function iconFor(item: NavChromeItem): ReactNode {
@@ -69,6 +74,7 @@ export function AppShellNav() {
   const [visibleCount, setVisibleCount] = useState(CHROME_ITEMS.length);
   const [moreAnchor, setMoreAnchor] = useState<null | HTMLElement>(null);
   const [langAnchor, setLangAnchor] = useState<null | HTMLElement>(null);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   useLayoutEffect(() => {
     const row = rowRef.current;
@@ -120,6 +126,20 @@ export function AppShellNav() {
     closeMore();
   }
 
+  function openFeedbackConfirm() {
+    closeMore();
+    setFeedbackOpen(true);
+  }
+
+  function closeFeedbackConfirm() {
+    setFeedbackOpen(false);
+  }
+
+  function confirmFeedback() {
+    window.open(FEEDBACK_URL, "_blank", "noopener,noreferrer");
+    closeFeedbackConfirm();
+  }
+
   function renderNavButton(item: NavChromeItem) {
     const label = t(item.labelKey);
     const startIcon = iconFor(item);
@@ -146,9 +166,7 @@ export function AppShellNav() {
           color="inherit"
           size="small"
           startIcon={startIcon}
-          href={item.href}
-          target="_blank"
-          rel="noopener noreferrer"
+          onClick={openFeedbackConfirm}
         >
           {label}
         </Button>
@@ -185,14 +203,7 @@ export function AppShellNav() {
 
     if (item.kind === "feedback") {
       return (
-        <MenuItem
-          key={item.id}
-          component="a"
-          href={item.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={closeMore}
-        >
+        <MenuItem key={item.id} onClick={openFeedbackConfirm}>
           <ListItemIcon>{icon}</ListItemIcon>
           {label}
         </MenuItem>
@@ -294,6 +305,27 @@ export function AppShellNav() {
             {t("language.zh")}
           </MenuItem>
         </Menu>
+
+        <Dialog
+          open={feedbackOpen}
+          onClose={closeFeedbackConfirm}
+          transitionDuration={0}
+          aria-labelledby="feedback-confirm-title"
+          aria-describedby="feedback-confirm-description"
+        >
+          <DialogTitle id="feedback-confirm-title">{t("feedback.confirmTitle")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="feedback-confirm-description">
+              {t("feedback.confirmBody")}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeFeedbackConfirm}>{t("feedback.cancel")}</Button>
+            <Button onClick={confirmFeedback} autoFocus>
+              {t("feedback.continue")}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Toolbar>
     </AppBar>
   );

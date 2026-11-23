@@ -39,5 +39,5 @@ Runs format check, lint, type-check, unit coverage, and e2e. Prefer this (or `np
 Useful when UI is involved but not yet covered by e2e:
 
 - Language switch updates chrome (en / zh).
-- Feedback opens the GitHub new-issue URL.
+- Feedback opens the GitHub new-issue URL only after confirm.
 - After a first online load, shell and previously fetched configs remain usable offline (PWA).

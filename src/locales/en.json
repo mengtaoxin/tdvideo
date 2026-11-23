@@ -74,5 +74,11 @@
   "language": {
     "en": "English",
     "zh": "中文"
+  },
+  "feedback": {
+    "confirmTitle": "Leave feedback?",
+    "confirmBody": "You will open GitHub in a new tab to file an issue.",
+    "cancel": "Cancel",
+    "continue": "Continue"
   }
 }
