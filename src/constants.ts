@@ -6,6 +6,7 @@ export const FEEDBACK_URL = `${REPO_URL}/issues/new`;
 export const NAV_ITEMS = [
   { to: "/", labelKey: "nav.home" },
   { to: "/now-playing", labelKey: "nav.nowPlaying" },
+  { to: "/continue-watching", labelKey: "nav.continueWatching" },
   { to: "/videos", labelKey: "nav.videos" },
   { to: "/playlists", labelKey: "nav.playlists" },
   { to: "/settings", labelKey: "nav.settings" },

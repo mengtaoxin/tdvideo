@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContinueWatchingRouteImport } from './routes/continue-watching'
 import { Route as NowPlayingRouteImport } from './routes/now-playing'
 import { Route as PlaylistsRouteImport } from './routes/playlists'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContinueWatchingRoute = ContinueWatchingRouteImport.update({
+  id: '/continue-watching',
+  path: '/continue-watching',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NowPlayingRoute = NowPlayingRouteImport.update({
@@ -50,6 +56,7 @@ const VideosRoute = VideosRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/continue-watching': typeof ContinueWatchingRoute
   '/now-playing': typeof NowPlayingRoute
   '/playlists': typeof PlaylistsRoute
   '/settings': typeof SettingsRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/continue-watching': typeof ContinueWatchingRoute
   '/now-playing': typeof NowPlayingRoute
   '/playlists': typeof PlaylistsRoute
   '/settings': typeof SettingsRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/continue-watching': typeof ContinueWatchingRoute
   '/now-playing': typeof NowPlayingRoute
   '/playlists': typeof PlaylistsRoute
   '/settings': typeof SettingsRoute
@@ -75,13 +84,27 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/about' | '/now-playing' | '/playlists' | '/settings' | '/videos'
+    | '/'
+    | '/about'
+    | '/continue-watching'
+    | '/now-playing'
+    | '/playlists'
+    | '/settings'
+    | '/videos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/now-playing' | '/playlists' | '/settings' | '/videos'
+  to:
+    | '/'
+    | '/about'
+    | '/continue-watching'
+    | '/now-playing'
+    | '/playlists'
+    | '/settings'
+    | '/videos'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/continue-watching'
     | '/now-playing'
     | '/playlists'
     | '/settings'
@@ -91,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ContinueWatchingRoute: typeof ContinueWatchingRoute
   NowPlayingRoute: typeof NowPlayingRoute
   PlaylistsRoute: typeof PlaylistsRoute
   SettingsRoute: typeof SettingsRoute
@@ -111,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/continue-watching': {
+      id: '/continue-watching'
+      path: '/continue-watching'
+      fullPath: '/continue-watching'
+      preLoaderRoute: typeof ContinueWatchingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/now-playing': {
@@ -147,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ContinueWatchingRoute: ContinueWatchingRoute,
   NowPlayingRoute: NowPlayingRoute,
   PlaylistsRoute: PlaylistsRoute,
   SettingsRoute: SettingsRoute,

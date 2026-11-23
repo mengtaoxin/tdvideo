@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "nowPlaying": "Now Playing",
+    "continueWatching": "Continue watching",
     "videos": "Videos",
     "playlists": "Playlists",
     "settings": "Settings",
@@ -17,10 +18,6 @@
     "goToVideos": "Browse videos",
     "goToPlaylists": "Browse playlists",
     "goToSettings": "Point Settings at your file",
-    "continueWatching": "Continue watching",
-    "continueMeta": "{{type}} · {{progress}}",
-    "typeVideo": "Video",
-    "typeList": "Playlist",
     "sample": {
       "badge": "read-only · static file",
       "required": "required",
@@ -63,9 +60,16 @@
       },
       "history": {
         "title": "Continue where you left off",
-        "description": "Watch progress for videos and playlists stays in this browser so Home can resume without a backend."
+        "description": "Watch progress for videos and playlists stays in this browser so Continue watching can resume without a backend."
       }
     }
+  },
+  "continueWatching": {
+    "title": "Continue watching",
+    "empty": "No watching history yet.",
+    "itemMeta": "{{type}} · {{progress}}",
+    "typeVideo": "Video",
+    "typeList": "Playlist"
   },
   "nowPlaying": {
     "empty": "Nothing is playing yet. Open a video or playlist to get started.",

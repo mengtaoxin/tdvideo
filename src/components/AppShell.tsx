@@ -1,4 +1,5 @@
 import AboutIcon from "@mui/icons-material/InfoOutlined";
+import ContinueWatchingIcon from "@mui/icons-material/HistoryOutlined";
 import FeedbackIcon from "@mui/icons-material/FeedbackOutlined";
 import HomeIcon from "@mui/icons-material/HomeOutlined";
 import LanguageIcon from "@mui/icons-material/Translate";
@@ -33,6 +34,7 @@ const MAX_VISIBLE_NAV_ITEMS = 5;
 const ROUTE_ICONS: Record<(typeof NAV_ITEMS)[number]["to"], typeof HomeIcon> = {
   "/": HomeIcon,
   "/now-playing": NowPlayingIcon,
+  "/continue-watching": ContinueWatchingIcon,
   "/videos": VideosIcon,
   "/playlists": PlaylistsIcon,
   "/settings": SettingsIcon,

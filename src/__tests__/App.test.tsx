@@ -294,12 +294,30 @@ describe("App shell", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent(/Could not load configs/i);
   });
 
-  it("shows continue watching on Home when history exists", async () => {
+  it("does not show continue watching on Home when history exists", async () => {
     await upsertHistoryEntry({ type: "video", id: "demo", progress: 125 });
     await renderAt("/");
+    expect(
+      await screen.findByRole("heading", {
+        name: "One read-only JSON file is your whole video library",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Continue watching" })).not.toBeInTheDocument();
+    expect(screen.queryByText(/Video · 02:05/)).not.toBeInTheDocument();
+  });
+
+  it("shows continue watching as a nav route with history entries", async () => {
+    await upsertHistoryEntry({ type: "video", id: "demo", progress: 125 });
+    await renderAt("/continue-watching");
     expect(await screen.findByRole("heading", { name: "Continue watching" })).toBeInTheDocument();
-    expect(screen.getByText("Demo Video")).toBeInTheDocument();
+    expect(await screen.findByText("Demo Video")).toBeInTheDocument();
     expect(screen.getByText(/Video · 02:05/)).toBeInTheDocument();
+  });
+
+  it("shows an empty state on Continue watching when history is empty", async () => {
+    await renderAt("/continue-watching");
+    expect(await screen.findByRole("heading", { name: "Continue watching" })).toBeInTheDocument();
+    expect(await screen.findByText("No watching history yet.")).toBeInTheDocument();
   });
 
   it("shows About app name, description, version, and repo link", async () => {

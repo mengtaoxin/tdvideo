@@ -28,7 +28,7 @@ export function CatalogGallery({ label, items, onOpen }: CatalogGalleryProps) {
   return (
     <ImageList cols={cols} gap={16} aria-label={label} sx={{ margin: 0 }}>
       {items.map((item) => (
-        <ImageListItem key={item.id} sx={{ overflow: "hidden", borderRadius: 1 }}>
+        <ImageListItem key={item.id} sx={{ overflow: "hidden", borderRadius: 3 }}>
           <ButtonBase
             onClick={() => onOpen(item.id)}
             sx={{

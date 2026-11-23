@@ -21,9 +21,13 @@ test.describe("tdvideo smoke", () => {
         link: "Now Playing",
         marker: { role: "link" as const, name: "Browse videos" },
       },
+      {
+        link: "Continue watching",
+        marker: { role: "heading" as const, name: "Continue watching" },
+      },
       { link: "Videos", marker: { role: "heading" as const, name: "Videos" } },
       { link: "Playlists", marker: { role: "heading" as const, name: "Playlists" } },
-      { link: "Settings", marker: { role: "heading" as const, name: "Settings" } },
+      { link: "Settings", marker: { role: "heading" as const, name: "Settings" }, overflow: true },
       { link: "About", marker: { role: "heading" as const, name: "About" }, overflow: true },
       {
         link: "Home",
@@ -62,7 +66,8 @@ test.describe("tdvideo smoke", () => {
     await page.getByRole("banner").getByRole("link", { name: "Videos" }).click();
     await expect(page.getByRole("button", { name: /Alt Fixture Video/i })).toBeVisible();
 
-    await page.getByRole("banner").getByRole("link", { name: "Settings" }).click();
+    await page.getByRole("banner").getByRole("button", { name: "More" }).click();
+    await page.getByRole("menuitem", { name: "Settings" }).click();
     await page.getByRole("button", { name: "Reset to default" }).click();
     await waitForConfigsReady(page);
     await expect(page.getByText(/Loaded configs from \/configs\.json/)).toBeVisible();

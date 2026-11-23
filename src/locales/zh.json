@@ -2,6 +2,7 @@
   "nav": {
     "home": "首页",
     "nowPlaying": "正在播放",
+    "continueWatching": "继续观看",
     "videos": "视频",
     "playlists": "播放列表",
     "settings": "设置",
@@ -17,10 +18,6 @@
     "goToVideos": "浏览视频",
     "goToPlaylists": "浏览播放列表",
     "goToSettings": "在设置里填写配置地址",
-    "continueWatching": "继续观看",
-    "continueMeta": "{{type}} · {{progress}}",
-    "typeVideo": "视频",
-    "typeList": "播放列表",
     "sample": {
       "badge": "只读 · 静态文件",
       "required": "必填",
@@ -63,9 +60,16 @@
       },
       "history": {
         "title": "接着上次看",
-        "description": "视频与播放列表的观看进度保存在当前浏览器，首页可继续观看，无需后端。"
+        "description": "视频与播放列表的观看进度保存在当前浏览器，「继续观看」可接着看，无需后端。"
       }
     }
+  },
+  "continueWatching": {
+    "title": "继续观看",
+    "empty": "暂无观看记录。",
+    "itemMeta": "{{type}} · {{progress}}",
+    "typeVideo": "视频",
+    "typeList": "播放列表"
   },
   "nowPlaying": {
     "empty": "当前没有播放内容。请打开视频或播放列表开始。",
