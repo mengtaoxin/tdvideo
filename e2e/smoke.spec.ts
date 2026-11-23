@@ -77,9 +77,15 @@ test.describe("tdvideo smoke", () => {
 
     await page.getByRole("button", { name: /Big Buck Bunny/i }).click();
     await expect(page.getByRole("heading", { name: "Big Buck Bunny" })).toBeVisible();
-    await expect(page.locator("video")).toBeVisible({ timeout: 15_000 });
+    const video = page.locator("video");
+    await expect(video).toBeVisible({ timeout: 15_000 });
     await expect(page.getByLabel("Toggle subtitles")).toBeVisible();
     await expect(page.getByLabel("Toggle bullet comments")).toBeVisible();
+    // Click-to-play: opening a title must not start playback by itself.
+    await expect.poll(async () => video.evaluate((el: HTMLVideoElement) => el.paused)).toBe(true);
+    await expect
+      .poll(async () => video.evaluate((el: HTMLVideoElement) => el.autoplay))
+      .toBe(false);
   });
 
   test("opens Now Playing from Playlists with sidebar", async ({ page }) => {

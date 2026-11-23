@@ -68,13 +68,21 @@ export function VideoJsStage({
 
   if (hls) {
     media = (
-      <HlsJsVideo key={src} src={src} playsInline crossOrigin="anonymous" title={title}>
+      <HlsJsVideo
+        key={src}
+        src={src}
+        autoPlay={false}
+        playsInline
+        crossOrigin="anonymous"
+        title={title}
+        preload="metadata"
+      >
         <SubtitleTracks subtitles={subtitles} autoDisplaySubtitles={autoDisplaySubtitles} />
       </HlsJsVideo>
     );
   } else {
     media = (
-      <Video key={src} src={src} playsInline title={title} preload="auto">
+      <Video key={src} src={src} autoPlay={false} playsInline title={title} preload="metadata">
         <SubtitleTracks subtitles={subtitles} autoDisplaySubtitles={autoDisplaySubtitles} />
       </Video>
     );
