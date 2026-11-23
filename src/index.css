@@ -2,6 +2,11 @@
   color-scheme: light;
 }
 
+html {
+  /* Reserve scrollbar width so short↔tall route changes do not shift the layout. */
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
 }
