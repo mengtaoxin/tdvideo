@@ -17,14 +17,20 @@ test.describe("tdvideo smoke", () => {
     ).toBeVisible();
 
     const cases = [
-      { link: "Now Playing", heading: "Now Playing" },
-      { link: "Videos", heading: "Videos" },
-      { link: "Playlists", heading: "Playlists" },
-      { link: "Settings", heading: "Settings" },
-      { link: "About", heading: "About", overflow: true },
+      {
+        link: "Now Playing",
+        marker: { role: "link" as const, name: "Browse videos" },
+      },
+      { link: "Videos", marker: { role: "heading" as const, name: "Videos" } },
+      { link: "Playlists", marker: { role: "heading" as const, name: "Playlists" } },
+      { link: "Settings", marker: { role: "heading" as const, name: "Settings" } },
+      { link: "About", marker: { role: "heading" as const, name: "About" }, overflow: true },
       {
         link: "Home",
-        heading: "One read-only JSON file is your whole video library",
+        marker: {
+          role: "heading" as const,
+          name: "One read-only JSON file is your whole video library",
+        },
       },
     ] as const;
 
@@ -36,7 +42,7 @@ test.describe("tdvideo smoke", () => {
       } else {
         await banner.getByRole("link", { name: item.link }).click();
       }
-      await expect(page.getByRole("heading", { name: item.heading })).toBeVisible();
+      await expect(page.getByRole(item.marker.role, { name: item.marker.name })).toBeVisible();
     }
   });
 
@@ -70,7 +76,6 @@ test.describe("tdvideo smoke", () => {
     await waitForConfigsReady(page);
 
     await page.getByRole("button", { name: /Big Buck Bunny/i }).click();
-    await expect(page.getByRole("heading", { name: "Now Playing" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Big Buck Bunny" })).toBeVisible();
     await expect(page.locator("video")).toBeVisible({ timeout: 15_000 });
     await expect(page.getByLabel("Toggle subtitles")).toBeVisible();
@@ -82,7 +87,6 @@ test.describe("tdvideo smoke", () => {
     await waitForConfigsReady(page);
 
     await page.getByRole("button", { name: /Demo playlist/i }).click();
-    await expect(page.getByRole("heading", { name: "Now Playing" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Big Buck Bunny" })).toBeVisible();
     await expect(page.getByLabel("Toggle subtitles")).toBeVisible();
     await expect(page.getByRole("complementary", { name: "Playlist" })).toBeVisible();

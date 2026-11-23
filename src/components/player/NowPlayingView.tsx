@@ -172,10 +172,6 @@ export function NowPlayingView() {
 
   return (
     <>
-      <Typography component="h1" variant="h4" gutterBottom>
-        {t("nowPlaying.title")}
-      </Typography>
-
       {!session || !resolved || !video ? (
         <NowPlayingEmptyState />
       ) : (

@@ -68,7 +68,6 @@
     }
   },
   "nowPlaying": {
-    "title": "Now Playing",
     "empty": "Nothing is playing yet. Open a video or playlist to get started.",
     "goToVideos": "Browse videos",
     "goToPlaylists": "Browse playlists",

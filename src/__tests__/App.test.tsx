@@ -191,8 +191,10 @@ describe("App shell", () => {
 
   it("shows the Now Playing empty-state CTAs", async () => {
     await renderAt("/now-playing");
-    expect(await screen.findByRole("heading", { name: "Now Playing" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Browse videos" })).toHaveAttribute("href", "/videos");
+    expect(await screen.findByRole("link", { name: "Browse videos" })).toHaveAttribute(
+      "href",
+      "/videos",
+    );
     expect(screen.getByRole("link", { name: "Browse playlists" })).toHaveAttribute(
       "href",
       "/playlists",
@@ -223,8 +225,7 @@ describe("App shell", () => {
     const user = userEvent.setup();
     await renderAt("/videos");
     await user.click(await screen.findByRole("button", { name: /Demo Video/i }));
-    expect(await screen.findByRole("heading", { name: "Now Playing" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
     expect(screen.getByLabelText("Toggle subtitles")).toBeInTheDocument();
     expect(screen.queryByRole("complementary", { name: "Playlist" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Previous in playlist" })).not.toBeInTheDocument();
@@ -268,8 +269,7 @@ describe("App shell", () => {
 
     await renderAt("/playlists");
     await user.click(await screen.findByRole("button", { name: /Demo Playlist/i }));
-    expect(await screen.findByRole("heading", { name: "Now Playing" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
     expect(screen.getByLabelText("Toggle subtitles")).toBeInTheDocument();
     expect(screen.getByRole("complementary", { name: "Playlist" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Previous in playlist" })).toBeDisabled();
