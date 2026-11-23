@@ -22,6 +22,7 @@ export function LanguageMenu({
       anchorEl={anchorEl}
       open={open}
       onClose={onClose}
+      disableScrollLock
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       transformOrigin={{ vertical: "top", horizontal: "right" }}
     >

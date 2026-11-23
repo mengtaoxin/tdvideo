@@ -6,20 +6,12 @@ import { useTranslation } from "react-i18next";
 
 import { ConfigsStatusBanner } from "@/components/ConfigsStatus";
 import { getHistoryEntry } from "@/db/database";
-import { planQuickPlay, type QuickPlayErrorCode } from "@/lib/playback";
+import { parseQuickPlaySearch, planQuickPlay, type QuickPlayErrorCode } from "@/lib/playback";
 import { useConfigsStore } from "@/stores/configsStore";
 import { usePlaybackStore } from "@/stores/playbackStore";
 
-type QuickPlaySearch = {
-  type?: string;
-  id?: string;
-};
-
 export const Route = createFileRoute("/quick-play")({
-  validateSearch: (search: Record<string, unknown>): QuickPlaySearch => ({
-    type: typeof search.type === "string" ? search.type : undefined,
-    id: typeof search.id === "string" ? search.id : undefined,
-  }),
+  validateSearch: parseQuickPlaySearch,
   component: QuickPlayPage,
 });
 

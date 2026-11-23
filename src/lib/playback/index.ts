@@ -6,8 +6,9 @@ export {
   ALL_VIDEOS_PLAYLIST_ID,
   NOW_PLAYING_QUICK_ID,
   allVideosPlaylist,
+  parseQuickPlaySearch,
   planQuickPlay,
 } from "./quickPlay";
-export type { QuickPlayErrorCode, QuickPlayPlan } from "./quickPlay";
+export type { QuickPlayErrorCode, QuickPlayPlan, QuickPlaySearch } from "./quickPlay";
 export { resolvePlayback } from "./resolve";
 export type { PlaybackSession, ResolvedPlayback } from "./resolve";

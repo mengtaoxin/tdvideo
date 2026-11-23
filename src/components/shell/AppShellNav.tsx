@@ -257,6 +257,7 @@ export function AppShellNav() {
           anchorEl={moreAnchor}
           open={Boolean(moreAnchor)}
           onClose={closeMore}
+          disableScrollLock
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           transformOrigin={{ vertical: "top", horizontal: "right" }}
         >

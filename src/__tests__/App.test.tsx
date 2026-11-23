@@ -145,6 +145,19 @@ describe("App shell", () => {
     expect(screen.getByRole("menuitem", { name: "Language" })).toBeInTheDocument();
   });
 
+  it("does not scroll-lock the document when More opens", async () => {
+    const user = userEvent.setup();
+    await renderAt("/");
+    const nav = await screen.findByRole("banner");
+
+    await user.click(within(nav).getByRole("button", { name: "More" }));
+    expect(await screen.findByRole("menu")).toBeInTheDocument();
+
+    // Scroll-lock removes the scrollbar and shifts AppBar width, which reflows overflow nav.
+    expect(document.body).not.toHaveStyle({ overflow: "hidden" });
+    expect(document.body.style.paddingRight).toBe("");
+  });
+
   it("shows the current route name as a non-interactive crumb in the chrome", async () => {
     await renderAt("/videos");
     const nav = await screen.findByRole("banner");

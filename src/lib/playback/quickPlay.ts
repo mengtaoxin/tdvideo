@@ -20,6 +20,30 @@ export type QuickPlayPlan =
   | { action: "continue" }
   | { action: "error"; code: QuickPlayErrorCode };
 
+export type QuickPlaySearch = {
+  type?: string;
+  id?: string;
+};
+
+function searchText(value: unknown): string | undefined {
+  if (typeof value === "string") {
+    return value;
+  }
+  // The router JSON-parses query values, so `id=178` arrives as a number.
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return String(value);
+  }
+  return undefined;
+}
+
+/** Read type and id from the search object the router already parsed. */
+export function parseQuickPlaySearch(search: Record<string, unknown>): QuickPlaySearch {
+  return {
+    type: searchText(search.type),
+    id: searchText(search.id),
+  };
+}
+
 export function allVideosPlaylist(catalog: ConfigsCatalog): PlaylistConfig {
   return {
     id: ALL_VIDEOS_PLAYLIST_ID,

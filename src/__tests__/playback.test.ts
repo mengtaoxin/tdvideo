@@ -1,3 +1,4 @@
+import { defaultParseSearch } from "@tanstack/react-router";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import {
@@ -5,6 +6,7 @@ import {
   commentsVisibleAt,
   isHlsUrl,
   parseBulletComments,
+  parseQuickPlaySearch,
   planQuickPlay,
   resolvePlayback,
 } from "../lib/playback";
@@ -123,6 +125,30 @@ describe("resolvePlayback", () => {
     expect(resolved?.playlist?.id).toBe(ALL_VIDEOS_PLAYLIST_ID);
     expect(resolved?.playlist?.videos).toEqual(["v1", "v2"]);
     expect(resolved?.index).toBe(1);
+  });
+});
+
+describe("parseQuickPlaySearch", () => {
+  it("keeps a numeric catalog id after the router JSON-parses the query", () => {
+    expect(parseQuickPlaySearch(defaultParseSearch("?type=video&id=178"))).toEqual({
+      type: "video",
+      id: "178",
+    });
+    expect(parseQuickPlaySearch(defaultParseSearch("?type=playlist&id=7"))).toEqual({
+      type: "playlist",
+      id: "7",
+    });
+  });
+
+  it("keeps string ids and drops non-text values", () => {
+    expect(parseQuickPlaySearch({ type: "video", id: "v1" })).toEqual({
+      type: "video",
+      id: "v1",
+    });
+    expect(parseQuickPlaySearch({ type: true, id: null })).toEqual({
+      type: undefined,
+      id: undefined,
+    });
   });
 });
 
