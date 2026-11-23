@@ -38,6 +38,7 @@ tdvideo/
 | Home configs.json sample UI                | `src/components/ConfigJsonSample.tsx`                           |
 | Player UI                                  | `src/components/player/`                                        |
 | Catalog parse / fetch / cache              | `src/lib/configs/`                                              |
+| Catalog gallery layout helpers             | `src/lib/catalog/`                                              |
 | History types / formatting                 | `src/lib/history/`                                              |
 | Playback helpers (resolve, bullets, media) | `src/lib/playback/`                                             |
 | IndexedDB access                           | `src/db/`                                                       |
