@@ -7,21 +7,16 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { Link as RouterLink } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getHistoryEntry } from "@/db/database";
-import {
-  fetchBulletComments,
-  resolvePlayback,
-  type BulletComment,
-  type PlaybackSession,
-} from "@/lib/playback";
+import { resolvePlayback, type PlaybackSession } from "@/lib/playback";
 import { useConfigsStore } from "@/stores/configsStore";
 import { usePlaybackStore } from "@/stores/playbackStore";
 
 import type { HistoryTarget } from "./HistoryProgressSync";
 import { PlaylistSidebar } from "./PlaylistSidebar";
+import { useBulletComments } from "./useBulletComments";
+import { useResumeProgress } from "./useResumeProgress";
 import { VideoJsStage } from "./VideoJsStage";
 
 function toHistoryTarget(session: PlaybackSession, index: number | undefined): HistoryTarget {
@@ -93,80 +88,14 @@ export function NowPlayingView() {
 
   const resolved = catalog && session ? resolvePlayback(catalog, session) : null;
 
-  const [bulletComments, setBulletComments] = useState<BulletComment[]>([]);
-  const [bulletCommentsEnabled, setBulletCommentsEnabled] = useState(true);
-  const [bulletError, setBulletError] = useState<string | null>(null);
-  const [resumeProgress, setResumeProgress] = useState(0);
-
   const video = resolved?.video;
   const playlist = resolved?.playlist;
   const playlistIndex = resolved?.index;
   const bulletTrackUrl = video?.bulletComments[0]?.url;
 
-  useEffect(() => {
-    if (!session) {
-      setResumeProgress(0);
-      return undefined;
-    }
-
-    setResumeProgress(0);
-    let cancelled = false;
-
-    void (async () => {
-      if (session.type === "video") {
-        const entry = await getHistoryEntry("video", session.videoId);
-        if (!cancelled) {
-          setResumeProgress(entry?.progress ?? 0);
-        }
-        return;
-      }
-
-      const entry = await getHistoryEntry("list", session.playlistId);
-      if (cancelled) {
-        return;
-      }
-      if (entry?.type === "list" && entry.index === session.index) {
-        setResumeProgress(entry.progress);
-      } else {
-        setResumeProgress(0);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [session]);
-
-  useEffect(() => {
-    if (!bulletTrackUrl) {
-      setBulletComments([]);
-      setBulletError(null);
-      setBulletCommentsEnabled(false);
-      return undefined;
-    }
-
-    const controller = new AbortController();
-    setBulletCommentsEnabled(true);
-    setBulletError(null);
-
-    void fetchBulletComments(bulletTrackUrl, controller.signal)
-      .then((comments) => {
-        if (!controller.signal.aborted) {
-          setBulletComments(comments);
-        }
-      })
-      .catch((error: unknown) => {
-        if (controller.signal.aborted) {
-          return;
-        }
-        setBulletComments([]);
-        setBulletError(error instanceof Error ? error.message : t("nowPlaying.bulletLoadError"));
-      });
-
-    return () => {
-      controller.abort();
-    };
-  }, [bulletTrackUrl, t]);
+  const resumeProgress = useResumeProgress(session);
+  const { bulletComments, bulletCommentsEnabled, setBulletCommentsEnabled, bulletError } =
+    useBulletComments(bulletTrackUrl, t("nowPlaying.bulletLoadError"));
 
   const videosById = new Map((catalog?.videos ?? []).map((item) => [item.id, item]));
 

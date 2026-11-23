@@ -22,7 +22,7 @@ tdvideo/
     ├── main.tsx           # Bootstrap
     ├── App.tsx            # Root tree (theme / providers)
     ├── routes/            # TanStack Router file-based routes
-    ├── components/        # Shared UI (shell, configs, player/)
+    ├── components/        # Shared UI (shell/, configs, player/)
     ├── lib/               # Pure helpers (configs/, history/, playback/)
     ├── db/                # Dexie (settings, history)
     ├── stores/            # Zustand stores
@@ -32,20 +32,23 @@ tdvideo/
 
 ## Placement
 
-| Concern                                    | Where                                                           |
-| ------------------------------------------ | --------------------------------------------------------------- |
-| New page / route                           | `src/routes/` (file-based; do not hand-edit `routeTree.gen.ts`) |
-| Home configs.json sample UI                | `src/components/ConfigJsonSample.tsx`                           |
-| Player UI                                  | `src/components/player/`                                        |
-| Catalog parse / fetch / cache              | `src/lib/configs/`                                              |
-| Catalog gallery layout helpers             | `src/lib/catalog/`                                              |
-| History types / formatting                 | `src/lib/history/`                                              |
-| Playback helpers (resolve, bullets, media) | `src/lib/playback/`                                             |
-| IndexedDB access                           | `src/db/`                                                       |
-| Client state                               | `src/stores/`                                                   |
-| Default catalog & sample media             | `public/` (`configs.json`, `fixtures/`)                         |
-| Unit tests                                 | `src/__tests__/` (or co-located `*.test.ts(x)`)                 |
-| E2E                                        | `e2e/`                                                          |
+| Concern                                    | Where                                                                |
+| ------------------------------------------ | -------------------------------------------------------------------- |
+| New page / route                           | `src/routes/` (file-based; do not hand-edit `routeTree.gen.ts`)      |
+| App chrome / nav shell                     | `src/components/shell/` (+ thin `AppShell.tsx` re-exports)           |
+| Home configs.json sample UI                | `src/components/ConfigJsonSample.tsx`                                |
+| Home configs.json sample field catalog     | `src/lib/configs/sampleCatalog.ts`                                   |
+| Player UI                                  | `src/components/player/`                                             |
+| Now Playing session hooks (resume/bullets) | `src/components/player/useResumeProgress.ts`, `useBulletComments.ts` |
+| Catalog parse / fetch / cache              | `src/lib/configs/`                                                   |
+| Catalog gallery layout helpers             | `src/lib/catalog/`                                                   |
+| History types / formatting                 | `src/lib/history/`                                                   |
+| Playback helpers (resolve, bullets, media) | `src/lib/playback/`                                                  |
+| IndexedDB access                           | `src/db/`                                                            |
+| Client state                               | `src/stores/`                                                        |
+| Default catalog & sample media             | `public/` (`configs.json`, `fixtures/`)                              |
+| Unit tests                                 | `src/__tests__/` (or co-located `*.test.ts(x)`)                      |
+| E2E                                        | `e2e/`                                                               |
 
 Product contracts (catalog shape, playback, history, PWA): see [tech-stack.md](./tech-stack.md).
 Testing layout and commands: see [testing.md](./testing.md).
