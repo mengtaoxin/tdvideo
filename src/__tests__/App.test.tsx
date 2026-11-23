@@ -40,12 +40,14 @@ async function renderAt(path: string) {
 
   await router.load();
 
-  return render(
+  const view = render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <RouterProvider router={router} />
     </ThemeProvider>,
   );
+
+  return Object.assign(view, { router });
 }
 
 describe("App shell", () => {
@@ -232,6 +234,30 @@ describe("App shell", () => {
     expect(screen.queryByRole("complementary", { name: "Playlist" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Previous in playlist" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Next in playlist" })).not.toBeInTheDocument();
+  });
+
+  it("quick-plays a video deep link into Now Playing and strips the query", async () => {
+    const { router } = await renderAt("/quick-play?type=video&id=demo");
+    expect(await screen.findByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe("/now-playing");
+    expect(router.state.location.search).toEqual({});
+  });
+
+  it("quick-plays a playlist deep link into Now Playing", async () => {
+    const { router } = await renderAt("/quick-play?type=playlist&id=pl1");
+    expect(await screen.findByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe("/now-playing");
+    expect(router.state.location.search).toEqual({});
+  });
+
+  it("stays on Quick play with a warning for an unknown video id", async () => {
+    const { router } = await renderAt("/quick-play?type=video&id=missing");
+    expect(await screen.findByRole("heading", { name: "Quick play" })).toBeInTheDocument();
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      /That video id is not in the loaded configs/i,
+    );
+    expect(router.state.location.pathname).toBe("/quick-play");
+    expect(router.state.location.search).toEqual({ type: "video", id: "missing" });
   });
 
   it("opens a playlist into Now Playing with the same stage plus sidebar and nav", async () => {

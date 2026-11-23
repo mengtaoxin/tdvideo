@@ -90,6 +90,17 @@
     "empty": "No videos in the loaded configs.",
     "itemMeta": "id: {{id}} · subtitles: {{subtitleCount}} · bullet tracks: {{bulletCount}}"
   },
+  "quickPlay": {
+    "title": "Quick play",
+    "errors": {
+      "missing-params": "Add type and id to the URL to open a video or playlist.",
+      "invalid-type": "type must be video or playlist.",
+      "unknown-video": "That video id is not in the loaded configs.",
+      "unknown-playlist": "That playlist id is not in the loaded configs.",
+      "empty-playlist": "That playlist has no playable videos.",
+      "no-session": "Nothing is playing yet. Open a video or playlist first."
+    }
+  },
   "playlists": {
     "title": "Playlists",
     "empty": "No playlists in the loaded configs.",

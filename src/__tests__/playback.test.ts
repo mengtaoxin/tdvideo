@@ -1,6 +1,13 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { commentsVisibleAt, isHlsUrl, parseBulletComments, resolvePlayback } from "../lib/playback";
+import {
+  ALL_VIDEOS_PLAYLIST_ID,
+  commentsVisibleAt,
+  isHlsUrl,
+  parseBulletComments,
+  planQuickPlay,
+  resolvePlayback,
+} from "../lib/playback";
 import type { ConfigsCatalog } from "../lib/configs";
 import { usePlaybackStore } from "../stores/playbackStore";
 
@@ -104,6 +111,68 @@ describe("resolvePlayback", () => {
       resolvePlayback(catalog, { type: "playlist", playlistId: "empty", index: 0 }),
     ).toBeNull();
     expect(resolvePlayback(catalog, { type: "playlist", playlistId: "p1", index: 99 })).toBeNull();
+  });
+
+  it("resolves the reserved all-videos playlist in catalog order", () => {
+    const resolved = resolvePlayback(catalog, {
+      type: "playlist",
+      playlistId: ALL_VIDEOS_PLAYLIST_ID,
+      index: 1,
+    });
+    expect(resolved?.video.id).toBe("v2");
+    expect(resolved?.playlist?.id).toBe(ALL_VIDEOS_PLAYLIST_ID);
+    expect(resolved?.playlist?.videos).toEqual(["v1", "v2"]);
+    expect(resolved?.index).toBe(1);
+  });
+});
+
+describe("planQuickPlay", () => {
+  it("plans opening a video or playlist", () => {
+    expect(planQuickPlay("video", "v1", catalog, false)).toEqual({
+      action: "open-video",
+      videoId: "v1",
+    });
+    expect(planQuickPlay("playlist", "p1", catalog, false)).toEqual({
+      action: "open-playlist",
+      playlistId: "p1",
+    });
+    expect(planQuickPlay("playlist", ALL_VIDEOS_PLAYLIST_ID, catalog, false)).toEqual({
+      action: "open-playlist",
+      playlistId: ALL_VIDEOS_PLAYLIST_ID,
+    });
+  });
+
+  it("continues the current session for the reserved now-playing id", () => {
+    expect(planQuickPlay("playlist", "now-playing", catalog, true)).toEqual({
+      action: "continue",
+    });
+    expect(planQuickPlay("video", "now-playing", catalog, false)).toEqual({
+      action: "error",
+      code: "no-session",
+    });
+  });
+
+  it("reports missing, invalid, unknown, and empty targets", () => {
+    expect(planQuickPlay(undefined, undefined, catalog, false)).toEqual({
+      action: "error",
+      code: "missing-params",
+    });
+    expect(planQuickPlay("other", "v1", catalog, false)).toEqual({
+      action: "error",
+      code: "invalid-type",
+    });
+    expect(planQuickPlay("video", "missing", catalog, false)).toEqual({
+      action: "error",
+      code: "unknown-video",
+    });
+    expect(planQuickPlay("playlist", "missing", catalog, false)).toEqual({
+      action: "error",
+      code: "unknown-playlist",
+    });
+    expect(planQuickPlay("playlist", "empty", catalog, false)).toEqual({
+      action: "error",
+      code: "empty-playlist",
+    });
   });
 });
 

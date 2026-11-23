@@ -90,6 +90,17 @@
     "empty": "已加载的配置中没有视频。",
     "itemMeta": "id：{{id}} · 字幕：{{subtitleCount}} · 弹幕轨道：{{bulletCount}}"
   },
+  "quickPlay": {
+    "title": "快速播放",
+    "errors": {
+      "missing-params": "请在 URL 中提供 type 和 id 以打开视频或播放列表。",
+      "invalid-type": "type 必须是 video 或 playlist。",
+      "unknown-video": "已加载的配置中找不到该视频 id。",
+      "unknown-playlist": "已加载的配置中找不到该播放列表 id。",
+      "empty-playlist": "该播放列表没有可播放的视频。",
+      "no-session": "当前没有播放内容。请先打开视频或播放列表。"
+    }
+  },
   "playlists": {
     "title": "播放列表",
     "empty": "已加载的配置中没有播放列表。",

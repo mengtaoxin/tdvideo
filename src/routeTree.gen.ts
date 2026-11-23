@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContinueWatchingRouteImport } from './routes/continue-watching'
 import { Route as NowPlayingRouteImport } from './routes/now-playing'
 import { Route as PlaylistsRouteImport } from './routes/playlists'
+import { Route as QuickPlayRouteImport } from './routes/quick-play'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as VideosRouteImport } from './routes/videos'
 
@@ -42,6 +43,11 @@ const PlaylistsRoute = PlaylistsRouteImport.update({
   path: '/playlists',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuickPlayRoute = QuickPlayRouteImport.update({
+  id: '/quick-play',
+  path: '/quick-play',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/continue-watching': typeof ContinueWatchingRoute
   '/now-playing': typeof NowPlayingRoute
   '/playlists': typeof PlaylistsRoute
+  '/quick-play': typeof QuickPlayRoute
   '/settings': typeof SettingsRoute
   '/videos': typeof VideosRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/continue-watching': typeof ContinueWatchingRoute
   '/now-playing': typeof NowPlayingRoute
   '/playlists': typeof PlaylistsRoute
+  '/quick-play': typeof QuickPlayRoute
   '/settings': typeof SettingsRoute
   '/videos': typeof VideosRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/continue-watching': typeof ContinueWatchingRoute
   '/now-playing': typeof NowPlayingRoute
   '/playlists': typeof PlaylistsRoute
+  '/quick-play': typeof QuickPlayRoute
   '/settings': typeof SettingsRoute
   '/videos': typeof VideosRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/continue-watching'
     | '/now-playing'
     | '/playlists'
+    | '/quick-play'
     | '/settings'
     | '/videos'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/continue-watching'
     | '/now-playing'
     | '/playlists'
+    | '/quick-play'
     | '/settings'
     | '/videos'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/continue-watching'
     | '/now-playing'
     | '/playlists'
+    | '/quick-play'
     | '/settings'
     | '/videos'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   ContinueWatchingRoute: typeof ContinueWatchingRoute
   NowPlayingRoute: typeof NowPlayingRoute
   PlaylistsRoute: typeof PlaylistsRoute
+  QuickPlayRoute: typeof QuickPlayRoute
   SettingsRoute: typeof SettingsRoute
   VideosRoute: typeof VideosRoute
 }
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlaylistsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quick-play': {
+      id: '/quick-play'
+      path: '/quick-play'
+      fullPath: '/quick-play'
+      preLoaderRoute: typeof QuickPlayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContinueWatchingRoute: ContinueWatchingRoute,
   NowPlayingRoute: NowPlayingRoute,
   PlaylistsRoute: PlaylistsRoute,
+  QuickPlayRoute: QuickPlayRoute,
   SettingsRoute: SettingsRoute,
   VideosRoute: VideosRoute,
 }

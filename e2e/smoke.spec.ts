@@ -108,4 +108,24 @@ test.describe("tdvideo smoke", () => {
     await expect(page.getByRole("button", { name: "Next in playlist" })).toBeEnabled();
     await expect(page.locator("video")).toBeVisible({ timeout: 15_000 });
   });
+
+  test("quick-play deep link opens Now Playing and strips the query", async ({ page }) => {
+    await page.goto("/quick-play?type=video&id=big-buck-bunny");
+    await waitForConfigsReady(page);
+
+    await expect(page.getByRole("heading", { name: "Big Buck Bunny" })).toBeVisible();
+    await expect(page).toHaveURL(/\/now-playing$/);
+    await expect(page.locator("video")).toBeVisible({ timeout: 15_000 });
+  });
+
+  test("quick-play stays with a warning for an unknown id", async ({ page }) => {
+    await page.goto("/quick-play?type=video&id=does-not-exist");
+    await waitForConfigsReady(page);
+
+    await expect(page.getByRole("heading", { name: "Quick play" })).toBeVisible();
+    await expect(page.getByRole("alert")).toContainText(
+      /That video id is not in the loaded configs/i,
+    );
+    await expect(page).toHaveURL(/\/quick-play\?type=video&id=does-not-exist/);
+  });
 });
