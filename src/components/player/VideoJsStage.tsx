@@ -98,8 +98,8 @@ export function VideoJsStage({
       </Box>
       <Box sx={{ mt: 2 }}>
         <PlaybackControls
-          subtitles={subtitles}
           autoDisplaySubtitles={autoDisplaySubtitles}
+          hasSubtitles={subtitles.length > 0}
           bulletCommentsEnabled={bulletCommentsEnabled}
           onBulletCommentsEnabledChange={onBulletCommentsEnabledChange}
           hasBulletComments={hasBulletCommentTrack}

@@ -226,7 +226,9 @@ describe("App shell", () => {
     await renderAt("/videos");
     await user.click(await screen.findByRole("button", { name: /Demo Video/i }));
     expect(await screen.findByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Toggle subtitles")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Toggle subtitles")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Subtitle track")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Toggle bullet comments")).toBeInTheDocument();
     expect(screen.queryByRole("complementary", { name: "Playlist" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Previous in playlist" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Next in playlist" })).not.toBeInTheDocument();
@@ -270,7 +272,8 @@ describe("App shell", () => {
     await renderAt("/playlists");
     await user.click(await screen.findByRole("button", { name: /Demo Playlist/i }));
     expect(await screen.findByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Toggle subtitles")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Toggle subtitles")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Toggle bullet comments")).toBeInTheDocument();
     expect(screen.getByRole("complementary", { name: "Playlist" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Previous in playlist" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Next in playlist" })).toBeEnabled();

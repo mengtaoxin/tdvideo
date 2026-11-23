@@ -79,7 +79,8 @@ test.describe("tdvideo smoke", () => {
     await expect(page.getByRole("heading", { name: "Big Buck Bunny" })).toBeVisible();
     const video = page.locator("video");
     await expect(video).toBeVisible({ timeout: 15_000 });
-    await expect(page.getByLabel("Toggle subtitles")).toBeVisible();
+    await expect(page.getByLabel("Toggle subtitles")).toHaveCount(0);
+    await expect(page.getByLabel("Subtitle track")).toHaveCount(0);
     await expect(page.getByLabel("Toggle bullet comments")).toBeVisible();
     // Click-to-play: opening a title must not start playback by itself.
     await expect.poll(async () => video.evaluate((el: HTMLVideoElement) => el.paused)).toBe(true);
@@ -94,7 +95,8 @@ test.describe("tdvideo smoke", () => {
 
     await page.getByRole("button", { name: /Demo playlist/i }).click();
     await expect(page.getByRole("heading", { name: "Big Buck Bunny" })).toBeVisible();
-    await expect(page.getByLabel("Toggle subtitles")).toBeVisible();
+    await expect(page.getByLabel("Toggle subtitles")).toHaveCount(0);
+    await expect(page.getByLabel("Toggle bullet comments")).toBeVisible();
     await expect(page.getByRole("complementary", { name: "Playlist" })).toBeVisible();
     await expect(page.getByText("Item 1 of 3")).toBeVisible();
     await expect(page.getByRole("button", { name: "Previous in playlist" })).toBeDisabled();
