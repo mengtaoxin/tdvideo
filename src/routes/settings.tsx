@@ -110,7 +110,7 @@ function SettingsPage() {
           >
             {t("settings.reset")}
           </Button>
-          <Button type="button" variant="text" disabled={saving} onClick={() => void reload()}>
+          <Button type="button" variant="outlined" disabled={saving} onClick={() => void reload()}>
             {t("settings.reload")}
           </Button>
           <Button
