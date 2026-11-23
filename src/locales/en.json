@@ -57,7 +57,15 @@
     "save": "Save and reload",
     "reset": "Reset to default",
     "reload": "Reload",
-    "loadedFrom": "Loaded configs from {{url}}"
+    "loadedFrom": "Loaded configs from {{url}}",
+    "clearCache": "Clear cache",
+    "clearCacheAction": "Clear",
+    "clearCacheTitle": "Clear cached data?",
+    "clearCacheDescription": "This removes cached configs and other Cache Storage data for tdvideo in this browser. Watching history in IndexedDB is kept.",
+    "clearCacheDone": "Cache cleared."
+  },
+  "common": {
+    "cancel": "Cancel"
   },
   "configs": {
     "loading": "Loading configs…",

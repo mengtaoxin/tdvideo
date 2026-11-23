@@ -1,10 +1,8 @@
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { CatalogGallery } from "@/components/CatalogGallery";
 import { ConfigsStatusBanner } from "@/components/ConfigsStatus";
 import { getHistoryEntry } from "@/db/database";
 import { useConfigsStore } from "@/stores/configsStore";
@@ -39,25 +37,21 @@ function PlaylistsPage() {
         <Typography color="text.secondary">{t("playlists.empty")}</Typography>
       ) : null}
       {status === "ready" && playlists && playlists.length > 0 ? (
-        <List aria-label={t("playlists.title")}>
-          {playlists.map((playlist) => (
-            <ListItemButton
-              key={playlist.id}
-              divider
-              onClick={() => {
-                void handleOpen(playlist.id);
-              }}
-            >
-              <ListItemText
-                primary={playlist.title}
-                secondary={t("playlists.itemMeta", {
-                  id: playlist.id,
-                  count: playlist.videos.length,
-                })}
-              />
-            </ListItemButton>
-          ))}
-        </List>
+        <CatalogGallery
+          label={t("playlists.title")}
+          items={playlists.map((playlist) => ({
+            id: playlist.id,
+            title: playlist.title,
+            posterUrl: playlist.posterUrl,
+            meta: t("playlists.itemMeta", {
+              id: playlist.id,
+              count: playlist.videos.length,
+            }),
+          }))}
+          onOpen={(id) => {
+            void handleOpen(id);
+          }}
+        />
       ) : null}
     </>
   );

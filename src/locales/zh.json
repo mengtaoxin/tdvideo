@@ -57,7 +57,15 @@
     "save": "保存并重新加载",
     "reset": "恢复默认",
     "reload": "重新加载",
-    "loadedFrom": "已从 {{url}} 加载配置"
+    "loadedFrom": "已从 {{url}} 加载配置",
+    "clearCache": "删除缓存",
+    "clearCacheAction": "清除",
+    "clearCacheTitle": "清除缓存数据？",
+    "clearCacheDescription": "将删除本浏览器中 tdvideo 的配置缓存及其他 Cache Storage 数据。IndexedDB 中的观看历史会保留。",
+    "clearCacheDone": "缓存已清除。"
+  },
+  "common": {
+    "cancel": "取消"
   },
   "configs": {
     "loading": "正在加载配置…",

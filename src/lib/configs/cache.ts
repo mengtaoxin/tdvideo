@@ -37,3 +37,14 @@ export async function writeCachedConfigsResponse(url: string, response: Response
   const cache = await storage.open(CONFIGS_CACHE_NAME);
   await cache.put(url, response.clone());
 }
+
+/** Deletes every Cache Storage bucket (configs runtime cache and Workbox caches). */
+export async function clearAppCaches(): Promise<void> {
+  const storage = getCacheStorage();
+  if (!storage) {
+    return;
+  }
+
+  const keys = await storage.keys();
+  await Promise.all(keys.map((key) => storage.delete(key)));
+}

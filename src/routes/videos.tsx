@@ -1,10 +1,8 @@
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { CatalogGallery } from "@/components/CatalogGallery";
 import { ConfigsStatusBanner } from "@/components/ConfigsStatus";
 import { useConfigsStore } from "@/stores/configsStore";
 import { usePlaybackStore } from "@/stores/playbackStore";
@@ -36,20 +34,20 @@ function VideosPage() {
         <Typography color="text.secondary">{t("videos.empty")}</Typography>
       ) : null}
       {status === "ready" && videos && videos.length > 0 ? (
-        <List aria-label={t("videos.title")}>
-          {videos.map((video) => (
-            <ListItemButton key={video.id} divider onClick={() => handleOpen(video.id)}>
-              <ListItemText
-                primary={video.title}
-                secondary={t("videos.itemMeta", {
-                  id: video.id,
-                  subtitleCount: video.subtitles.length,
-                  bulletCount: video.bulletComments.length,
-                })}
-              />
-            </ListItemButton>
-          ))}
-        </List>
+        <CatalogGallery
+          label={t("videos.title")}
+          items={videos.map((video) => ({
+            id: video.id,
+            title: video.title,
+            posterUrl: video.posterUrl,
+            meta: t("videos.itemMeta", {
+              id: video.id,
+              subtitleCount: video.subtitles.length,
+              bulletCount: video.bulletComments.length,
+            }),
+          }))}
+          onOpen={handleOpen}
+        />
       ) : null}
     </>
   );

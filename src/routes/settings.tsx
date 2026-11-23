@@ -8,8 +8,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { ConfigsStatusBanner } from "@/components/ConfigsStatus";
-import { DEFAULT_CONFIGS_URL } from "@/lib/configs";
+import { clearAppCaches, DEFAULT_CONFIGS_URL } from "@/lib/configs";
 import { useConfigsStore } from "@/stores/configsStore";
 
 export const Route = createFileRoute("/settings")({
@@ -27,6 +28,8 @@ function SettingsPage() {
 
   const [draftUrl, setDraftUrl] = useState(settingsUrl ?? DEFAULT_CONFIGS_URL);
   const [saving, setSaving] = useState(false);
+  const [clearConfirmOpen, setClearConfirmOpen] = useState(false);
+  const [cacheCleared, setCacheCleared] = useState(false);
 
   useEffect(() => {
     setDraftUrl(settingsUrl ?? DEFAULT_CONFIGS_URL);
@@ -51,6 +54,19 @@ function SettingsPage() {
     }
   }
 
+  async function handleClearCache() {
+    setClearConfirmOpen(false);
+    setSaving(true);
+    setCacheCleared(false);
+    try {
+      await clearAppCaches();
+      await reload();
+      setCacheCleared(true);
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <>
       <Typography component="h1" variant="h4" gutterBottom>
@@ -65,6 +81,11 @@ function SettingsPage() {
           {t("settings.loadedFrom", { url: effectiveUrl })}
         </Alert>
       ) : null}
+      {cacheCleared ? (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          {t("settings.clearCacheDone")}
+        </Alert>
+      ) : null}
       <Box component="form" onSubmit={(event) => void handleSave(event)} noValidate>
         <TextField
           fullWidth
@@ -77,7 +98,7 @@ function SettingsPage() {
           helperText={t("settings.configsUrlHelp", { defaultUrl: DEFAULT_CONFIGS_URL })}
           disabled={saving}
         />
-        <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+        <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: "wrap" }}>
           <Button type="submit" variant="contained" disabled={saving}>
             {t("settings.save")}
           </Button>
@@ -92,8 +113,30 @@ function SettingsPage() {
           <Button type="button" variant="text" disabled={saving} onClick={() => void reload()}>
             {t("settings.reload")}
           </Button>
+          <Button
+            type="button"
+            variant="outlined"
+            color="warning"
+            disabled={saving}
+            onClick={() => setClearConfirmOpen(true)}
+          >
+            {t("settings.clearCache")}
+          </Button>
         </Stack>
       </Box>
+
+      <ConfirmDialog
+        open={clearConfirmOpen}
+        title={t("settings.clearCacheTitle")}
+        description={t("settings.clearCacheDescription")}
+        confirmLabel={t("settings.clearCacheAction")}
+        cancelLabel={t("common.cancel")}
+        confirmColor="warning"
+        onConfirm={() => {
+          void handleClearCache();
+        }}
+        onCancel={() => setClearConfirmOpen(false)}
+      />
     </>
   );
 }

@@ -4,6 +4,7 @@
       "id": "big-buck-bunny",
       "title": "Big Buck Bunny",
       "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "poster-url": "/fixtures/poster-bbb.svg",
       "autoDisplaySubtitles": true,
       "subtitles": [
         {
@@ -33,6 +34,7 @@
       "id": "elephants-dream",
       "title": "Elephants Dream",
       "url": "https://media.w3.org/2010/05/video/movie_300.mp4",
+      "poster-url": "/fixtures/poster-elephants.svg",
       "autoDisplaySubtitles": false,
       "subtitles": [
         {
@@ -49,6 +51,7 @@
       "id": "sintel",
       "title": "Sintel",
       "url": "https://media.w3.org/2010/05/sintel/trailer.mp4",
+      "poster-url": "/fixtures/poster-sintel.svg",
       "autoDisplaySubtitles": true,
       "subtitles": [
         {
@@ -79,11 +82,13 @@
     {
       "id": "demo-playlist",
       "title": "Demo playlist",
+      "poster-url": "/fixtures/poster-demo-playlist.svg",
       "videos": ["big-buck-bunny", "elephants-dream", "sintel"]
     },
     {
       "id": "short-list",
       "title": "Short list",
+      "poster-url": "/fixtures/poster-short-list.svg",
       "videos": ["sintel", "missing-video-id", "big-buck-bunny"]
     }
   ]

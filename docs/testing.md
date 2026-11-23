@@ -40,4 +40,5 @@ Useful when UI is involved but not yet covered by e2e:
 
 - Language switch updates chrome (en / zh).
 - Feedback opens the GitHub new-issue URL only after confirm.
+- Settings Clear cache asks for confirm; cancel leaves Cache Storage; confirm clears it and shows success.
 - After a first online load, shell and previously fetched configs remain usable offline (PWA).

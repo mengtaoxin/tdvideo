@@ -16,6 +16,7 @@ export interface VideoConfig {
   id: string;
   title: string;
   url: string;
+  posterUrl?: string;
   autoDisplaySubtitles?: boolean;
   subtitles: SubtitleTrack[];
   bulletComments: BulletCommentTrack[];
@@ -25,6 +26,7 @@ export interface PlaylistConfig {
   id: string;
   title: string;
   videos: string[];
+  posterUrl?: string;
 }
 
 export interface ConfigsCatalog {
@@ -50,6 +52,8 @@ export interface RawVideo {
   id: string;
   title: string;
   url: string;
+  "poster-url"?: string;
+  posterUrl?: string;
   autoDisplaySubtitles?: boolean;
   subtitles?: RawSubtitleTrack[];
   "bullet-comments"?: RawBulletCommentTrack[];
@@ -60,6 +64,8 @@ export interface RawPlaylist {
   id: string;
   title: string;
   videos?: string[];
+  "poster-url"?: string;
+  posterUrl?: string;
 }
 
 export interface RawConfigs {

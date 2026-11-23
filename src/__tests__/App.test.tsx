@@ -17,11 +17,19 @@ const sampleConfigs = {
       id: "demo",
       title: "Demo Video",
       url: "https://example.com/demo.mp4",
+      "poster-url": "/fixtures/poster-demo.svg",
       subtitles: [],
       "bullet-comments": [],
     },
   ],
-  playlists: [{ id: "pl1", title: "Demo Playlist", videos: ["demo"] }],
+  playlists: [
+    {
+      id: "pl1",
+      title: "Demo Playlist",
+      videos: ["demo"],
+      "poster-url": "/fixtures/poster-playlist.svg",
+    },
+  ],
 };
 
 async function renderAt(path: string) {
@@ -128,14 +136,24 @@ describe("App shell", () => {
     );
   });
 
-  it("lists videos from loaded configs", async () => {
+  it("shows videos as a poster gallery from loaded configs", async () => {
     await renderAt("/videos");
-    expect(await screen.findByText("Demo Video")).toBeInTheDocument();
+    const gallery = await screen.findByRole("list", { name: "Videos" });
+    expect(within(gallery).getByRole("button", { name: /Demo Video/i })).toBeInTheDocument();
+    expect(within(gallery).getByRole("img", { name: "Demo Video" })).toHaveAttribute(
+      "src",
+      "/fixtures/poster-demo.svg",
+    );
   });
 
-  it("lists playlists from loaded configs", async () => {
+  it("shows playlists as a poster gallery from loaded configs", async () => {
     await renderAt("/playlists");
-    expect(await screen.findByText("Demo Playlist")).toBeInTheDocument();
+    const gallery = await screen.findByRole("list", { name: "Playlists" });
+    expect(within(gallery).getByRole("button", { name: /Demo Playlist/i })).toBeInTheDocument();
+    expect(within(gallery).getByRole("img", { name: "Demo Playlist" })).toHaveAttribute(
+      "src",
+      "/fixtures/poster-playlist.svg",
+    );
   });
 
   it("opens a video into Now Playing", async () => {
@@ -228,5 +246,31 @@ describe("App shell", () => {
       "href",
       "https://github.com/mengtaoxin/tdvideo",
     );
+  });
+
+  it("clears cache from Settings only after confirm", async () => {
+    const user = userEvent.setup();
+    const { installCacheStorageStub } = await import("./cacheStorageStub");
+    const { CONFIGS_CACHE_NAME } = await import("../lib/configs");
+    installCacheStorageStub();
+    const cache = await caches.open(CONFIGS_CACHE_NAME);
+    await cache.put("/configs.json", Response.json(sampleConfigs));
+    expect(await caches.has(CONFIGS_CACHE_NAME)).toBe(true);
+
+    await renderAt("/settings");
+    await user.click(await screen.findByRole("button", { name: "Clear cache" }));
+
+    const dialog = await screen.findByRole("dialog", { name: "Clear cached data?" });
+    expect(dialog).toBeInTheDocument();
+
+    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    expect(screen.queryByRole("dialog", { name: "Clear cached data?" })).not.toBeInTheDocument();
+    expect(await caches.has(CONFIGS_CACHE_NAME)).toBe(true);
+
+    await user.click(screen.getByRole("button", { name: "Clear cache" }));
+    const confirmDialog = await screen.findByRole("dialog", { name: "Clear cached data?" });
+    await user.click(within(confirmDialog).getByRole("button", { name: "Clear" }));
+
+    expect(await screen.findByText("Cache cleared.")).toBeInTheDocument();
   });
 });

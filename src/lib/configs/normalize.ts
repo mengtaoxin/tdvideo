@@ -55,6 +55,14 @@ function normalizeBullet(raw: RawBulletCommentTrack): BulletCommentTrack {
   };
 }
 
+function optionalPosterUrl(raw: { "poster-url"?: string; posterUrl?: string }): string | undefined {
+  const value = raw["poster-url"] ?? raw.posterUrl;
+  if (typeof value !== "string" || value.length === 0) {
+    return undefined;
+  }
+  return value;
+}
+
 function normalizeVideo(raw: RawVideo): VideoConfig {
   const rawBullets = raw["bullet-comments"] ?? raw.bulletComments ?? [];
   const subtitles = Array.isArray(raw.subtitles)
@@ -63,11 +71,13 @@ function normalizeVideo(raw: RawVideo): VideoConfig {
   const bulletComments = Array.isArray(rawBullets)
     ? dedupeById(rawBullets.map(normalizeBullet))
     : [];
+  const posterUrl = optionalPosterUrl(raw);
 
   return {
     id: requireString(raw.id, "video.id"),
     title: requireString(raw.title, "video.title"),
     url: requireString(raw.url, "video.url"),
+    ...(posterUrl ? { posterUrl } : {}),
     ...(raw.autoDisplaySubtitles === true ? { autoDisplaySubtitles: true } : {}),
     subtitles,
     bulletComments,
@@ -92,11 +102,13 @@ function normalizePlaylist(raw: RawPlaylist, knownVideoIds: Set<string>): Playli
   const videoIds = Array.isArray(raw.videos)
     ? raw.videos.filter((id): id is string => typeof id === "string")
     : [];
+  const posterUrl = optionalPosterUrl(raw);
 
   return {
     id: requireString(raw.id, "playlist.id"),
     title: requireString(raw.title, "playlist.title"),
     videos: resolvePlaylistVideos(videoIds, knownVideoIds),
+    ...(posterUrl ? { posterUrl } : {}),
   };
 }
 

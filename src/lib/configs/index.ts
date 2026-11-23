@@ -5,6 +5,7 @@ import type { ConfigsCatalog } from "./types";
 export {
   CONFIGS_CACHE_NAME,
   CONFIGS_RUNTIME_CACHE_URL_PATTERN,
+  clearAppCaches,
   isConfigsRuntimeCacheUrl,
   readCachedConfigsResponse,
   writeCachedConfigsResponse,

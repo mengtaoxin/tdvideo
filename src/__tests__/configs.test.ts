@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   CONFIGS_CACHE_NAME,
+  clearAppCaches,
   fetchConfigs,
   isConfigsRuntimeCacheUrl,
   normalizeConfigs,
@@ -84,6 +85,46 @@ describe("normalizeConfigs", () => {
     expect(result.videos[0]?.bulletComments).toEqual([
       { id: "b1", title: "Main", url: "/fixtures/bullets.json" },
     ]);
+  });
+
+  it("maps poster-url onto videos and playlists", () => {
+    const raw: RawConfigs = {
+      videos: [
+        {
+          id: "v1",
+          title: "With poster",
+          url: "https://example.com/a.mp4",
+          "poster-url": "/fixtures/poster-v1.svg",
+        },
+        {
+          id: "v2",
+          title: "Camel poster",
+          url: "https://example.com/b.mp4",
+          posterUrl: "/fixtures/poster-v2.svg",
+        },
+        {
+          id: "v3",
+          title: "Empty poster",
+          url: "https://example.com/c.mp4",
+          "poster-url": "",
+        },
+      ],
+      playlists: [
+        {
+          id: "p1",
+          title: "List with poster",
+          videos: ["v1"],
+          "poster-url": "/fixtures/poster-p1.svg",
+        },
+      ],
+    };
+
+    const result = normalizeConfigs(raw);
+
+    expect(result.videos[0]?.posterUrl).toBe("/fixtures/poster-v1.svg");
+    expect(result.videos[1]?.posterUrl).toBe("/fixtures/poster-v2.svg");
+    expect(result.videos[2]?.posterUrl).toBeUndefined();
+    expect(result.playlists[0]?.posterUrl).toBe("/fixtures/poster-p1.svg");
   });
 
   it("throws on invalid root shape", () => {
@@ -181,5 +222,22 @@ describe("fetchConfigs offline cache", () => {
     const catalog = await fetchConfigs("https://cdn.example/custom-catalog.json");
 
     expect(catalog.videos[0]?.title).toBe("Cached");
+  });
+
+  it("clearAppCaches removes Cache Storage entries", async () => {
+    const cache = await caches.open(CONFIGS_CACHE_NAME);
+    await cache.put(
+      "https://cdn.example/custom-catalog.json",
+      new Response(catalogBody, {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    await caches.open("other-cache");
+
+    await clearAppCaches();
+
+    expect(await caches.has(CONFIGS_CACHE_NAME)).toBe(false);
+    expect(await caches.has("other-cache")).toBe(false);
   });
 });
