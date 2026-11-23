@@ -54,4 +54,3 @@ stages:
       - docs/file-structure.md
       - docs/commands.md
       - docs/testing.md
-      - docs/tech-stack.md
