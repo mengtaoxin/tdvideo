@@ -127,15 +127,60 @@ describe("App shell", () => {
     await user.click(await screen.findByRole("button", { name: /Demo Video/i }));
     expect(await screen.findByRole("heading", { name: "Now Playing" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Toggle subtitles")).toBeInTheDocument();
+    expect(screen.queryByRole("complementary", { name: "Playlist" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Previous in playlist" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Next in playlist" })).not.toBeInTheDocument();
   });
 
-  it("opens a playlist into Now Playing with a sidebar", async () => {
+  it("opens a playlist into Now Playing with the same stage plus sidebar and nav", async () => {
     const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(
+          Response.json(
+            {
+              videos: [
+                {
+                  id: "demo",
+                  title: "Demo Video",
+                  url: "https://example.com/demo.mp4",
+                  subtitles: [],
+                  "bullet-comments": [],
+                },
+                {
+                  id: "demo-b",
+                  title: "Second Video",
+                  url: "https://example.com/demo-b.mp4",
+                  subtitles: [],
+                  "bullet-comments": [],
+                },
+              ],
+              playlists: [{ id: "pl1", title: "Demo Playlist", videos: ["demo", "demo-b"] }],
+            },
+            {
+              status: 200,
+              headers: { "Content-Type": "application/json" },
+            },
+          ),
+        ),
+      ),
+    );
+
     await renderAt("/playlists");
     await user.click(await screen.findByRole("button", { name: /Demo Playlist/i }));
     expect(await screen.findByRole("heading", { name: "Now Playing" })).toBeInTheDocument();
-    expect(screen.getByRole("complementary", { name: "Playlist" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Demo Video" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Toggle subtitles")).toBeInTheDocument();
+    expect(screen.getByRole("complementary", { name: "Playlist" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Previous in playlist" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Next in playlist" })).toBeEnabled();
+
+    await user.click(screen.getByRole("button", { name: "Next in playlist" }));
+    expect(await screen.findByRole("heading", { name: "Second Video" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Previous in playlist" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Next in playlist" })).toBeDisabled();
   });
 
   it("shows a clear error when configs fail to load", async () => {

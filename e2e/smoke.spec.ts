@@ -71,8 +71,11 @@ test.describe("tdvideo smoke", () => {
     await page.getByRole("button", { name: /Demo playlist/i }).click();
     await expect(page.getByRole("heading", { name: "Now Playing" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Big Buck Bunny" })).toBeVisible();
+    await expect(page.getByLabel("Toggle subtitles")).toBeVisible();
     await expect(page.getByRole("complementary", { name: "Playlist" })).toBeVisible();
     await expect(page.getByText("Item 1 of 3")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Previous in playlist" })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Next in playlist" })).toBeEnabled();
     await expect(page.locator("video")).toBeVisible({ timeout: 15_000 });
   });
 });

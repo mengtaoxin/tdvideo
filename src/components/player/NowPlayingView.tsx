@@ -1,7 +1,9 @@
+import SkipNextIcon from "@mui/icons-material/SkipNext";
+import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { Link as RouterLink } from "@tanstack/react-router";
@@ -49,6 +51,39 @@ function NowPlayingEmptyState() {
   );
 }
 
+function PlaylistNavButtons({
+  currentIndex,
+  total,
+  onSelectIndex,
+}: {
+  currentIndex: number;
+  total: number;
+  onSelectIndex: (index: number) => void;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <Stack direction="row" spacing={0.5} sx={{ flexShrink: 0 }}>
+      <IconButton
+        aria-label={t("nowPlaying.playlistPrevious")}
+        disabled={currentIndex <= 0}
+        onClick={() => onSelectIndex(currentIndex - 1)}
+        size="small"
+      >
+        <SkipPreviousIcon />
+      </IconButton>
+      <IconButton
+        aria-label={t("nowPlaying.playlistNext")}
+        disabled={currentIndex >= total - 1}
+        onClick={() => onSelectIndex(currentIndex + 1)}
+        size="small"
+      >
+        <SkipNextIcon />
+      </IconButton>
+    </Stack>
+  );
+}
+
 export function NowPlayingView() {
   const { t } = useTranslation();
   const catalog = useConfigsStore((state) => state.catalog);
@@ -64,6 +99,8 @@ export function NowPlayingView() {
   const [resumeProgress, setResumeProgress] = useState(0);
 
   const video = resolved?.video;
+  const playlist = resolved?.playlist;
+  const playlistIndex = resolved?.index;
   const bulletTrackUrl = video?.bulletComments[0]?.url;
 
   useEffect(() => {
@@ -142,42 +179,58 @@ export function NowPlayingView() {
       {!session || !resolved || !video ? (
         <NowPlayingEmptyState />
       ) : (
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: resolved.playlist ? 8 : 12 }}>
-            <Typography component="h2" variant="h5" gutterBottom>
-              {video.title}
-            </Typography>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={3}
+          sx={{ alignItems: { md: "flex-start" } }}
+        >
+          <Box sx={{ flex: 1, minWidth: 0, width: "100%" }}>
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 1, minHeight: 40 }}>
+              <Typography component="h2" variant="h5" sx={{ flex: 1, minWidth: 0 }}>
+                {video.title}
+              </Typography>
+              {playlist && playlistIndex !== undefined ? (
+                <PlaylistNavButtons
+                  currentIndex={playlistIndex}
+                  total={playlist.videos.length}
+                  onSelectIndex={setPlaylistIndex}
+                />
+              ) : null}
+            </Stack>
             {bulletError ? (
               <Alert severity="warning" sx={{ mb: 2 }}>
                 {bulletError}
               </Alert>
             ) : null}
-            <Box>
-              <VideoJsStage
-                src={video.url}
-                title={video.title}
-                subtitles={video.subtitles}
-                autoDisplaySubtitles={video.autoDisplaySubtitles === true}
-                bulletComments={bulletComments}
-                bulletCommentsEnabled={bulletCommentsEnabled}
-                onBulletCommentsEnabledChange={setBulletCommentsEnabled}
-                hasBulletCommentTrack={Boolean(bulletTrackUrl)}
-                historyTarget={toHistoryTarget(session, resolved.index)}
-                resumeProgress={resumeProgress}
-              />
-            </Box>
-          </Grid>
-          {resolved.playlist && resolved.index !== undefined ? (
-            <Grid size={{ xs: 12, md: 4 }}>
+            <VideoJsStage
+              src={video.url}
+              title={video.title}
+              subtitles={video.subtitles}
+              autoDisplaySubtitles={video.autoDisplaySubtitles === true}
+              bulletComments={bulletComments}
+              bulletCommentsEnabled={bulletCommentsEnabled}
+              onBulletCommentsEnabledChange={setBulletCommentsEnabled}
+              hasBulletCommentTrack={Boolean(bulletTrackUrl)}
+              historyTarget={toHistoryTarget(session, playlistIndex)}
+              resumeProgress={resumeProgress}
+            />
+          </Box>
+          {playlist && playlistIndex !== undefined ? (
+            <Box
+              sx={{
+                width: { xs: "100%", md: 300 },
+                flexShrink: 0,
+              }}
+            >
               <PlaylistSidebar
-                playlist={resolved.playlist}
+                playlist={playlist}
                 videosById={videosById}
-                currentIndex={resolved.index}
+                currentIndex={playlistIndex}
                 onSelectIndex={setPlaylistIndex}
               />
-            </Grid>
+            </Box>
           ) : null}
-        </Grid>
+        </Stack>
       )}
 
       {session && !resolved && status === "ready" ? (

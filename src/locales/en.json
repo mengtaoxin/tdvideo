@@ -35,6 +35,8 @@
     "playlistSidebar": "Playlist",
     "playlistPosition": "Item {{current}} of {{total}}",
     "playlistItemIndex": "#{{index}}",
+    "playlistPrevious": "Previous in playlist",
+    "playlistNext": "Next in playlist",
     "missingItem": "The selected video or playlist is not in the loaded configs."
   },
   "videos": {

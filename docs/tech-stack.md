@@ -27,7 +27,7 @@ Use latest **stable** dependency versions at install time. Private `@mengtaoxin/
 ## Product (supported)
 
 - **Catalog**: JSON with `videos` and `playlists`. Default URL `/configs.json`; Settings may override the URL and persist it in Dexie. Playlist entries reference video ids as strings.
-- **Playback**: Now Playing uses Video.js. Subtitles are WebVTT tracks (optional auto-display). Bullet comments load from JSON `{ "time", "text" }[]` and overlay in sync with playback. Active playlists show a sidebar to switch items.
+- **Playback**: Now Playing is one shared stage for videos and playlists (Video.js). Subtitles are WebVTT tracks (optional auto-display). Bullet comments load from JSON `{ "time", "text" }[]` and overlay in sync with playback. Playlists add previous/next controls and a sidebar to switch items; the player stage layout stays the same.
 - **History**: Dexie keeps the latest progress per video or playlist (playlists also store the item index). Progress is seconds; UI shows `mm:ss` or `hh:mm:ss`. Home can continue watching; opening a title restores progress.
 - **Chrome**: Left-aligned top nav (Home, Now Playing, Videos, Playlists, Settings, About, language, Feedback) with icons; narrow viewports fold trailing items into a More menu; language is a button that opens a menu on click; Feedback opens the GitHub new-issue URL. Empty Now Playing links to Videos / Playlists.
 - **Remote media**: Cross-origin media, subtitle, and bullet-comment URLs need CORS for the app origin. Same-origin assets under `public/` do not.

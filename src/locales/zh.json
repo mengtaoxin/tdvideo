@@ -35,6 +35,8 @@
     "playlistSidebar": "播放列表",
     "playlistPosition": "第 {{current}} / {{total}} 项",
     "playlistItemIndex": "#{{index}}",
+    "playlistPrevious": "播放列表上一集",
+    "playlistNext": "播放列表下一集",
     "missingItem": "所选视频或播放列表不在已加载的配置中。"
   },
   "videos": {
