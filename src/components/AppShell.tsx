@@ -28,6 +28,7 @@ import { FEEDBACK_URL, NAV_ITEMS } from "@/constants";
 import { fitVisibleCount } from "@/lib/nav";
 
 const NAV_GAP_PX = 4;
+const MAX_VISIBLE_NAV_ITEMS = 5;
 
 const ROUTE_ICONS: Record<(typeof NAV_ITEMS)[number]["to"], typeof HomeIcon> = {
   "/": HomeIcon,
@@ -71,7 +72,9 @@ export function AppShellNav() {
   const rowRef = useRef<HTMLDivElement>(null);
   const measureRefs = useRef<(HTMLDivElement | null)[]>([]);
   const moreMeasureRef = useRef<HTMLDivElement>(null);
-  const [visibleCount, setVisibleCount] = useState(CHROME_ITEMS.length);
+  const [visibleCount, setVisibleCount] = useState(
+    Math.min(CHROME_ITEMS.length, MAX_VISIBLE_NAV_ITEMS),
+  );
   const [moreAnchor, setMoreAnchor] = useState<null | HTMLElement>(null);
   const [langAnchor, setLangAnchor] = useState<null | HTMLElement>(null);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -84,14 +87,13 @@ export function AppShellNav() {
 
     function measure() {
       const available = rowRef.current?.clientWidth ?? 0;
-      // jsdom / pre-layout: keep everything visible until we have a real width
-      if (available <= 0) {
-        setVisibleCount(CHROME_ITEMS.length);
-        return;
-      }
       const widths = CHROME_ITEMS.map((_, index) => measureRefs.current[index]?.offsetWidth ?? 0);
       const moreWidth = moreMeasureRef.current?.offsetWidth ?? 0;
-      setVisibleCount(fitVisibleCount(widths, available, moreWidth, NAV_GAP_PX));
+      // jsdom / pre-layout: treat as unlimited width but still respect the visible cap
+      const widthForFit = available > 0 ? available : Number.POSITIVE_INFINITY;
+      setVisibleCount(
+        fitVisibleCount(widths, widthForFit, moreWidth, NAV_GAP_PX, MAX_VISIBLE_NAV_ITEMS),
+      );
     }
 
     measure();
@@ -225,12 +227,13 @@ export function AppShellNav() {
 
   return (
     <AppBar position="static" color="default" elevation={1}>
-      <Toolbar sx={{ gap: 1, justifyContent: "flex-start" }}>
+      <Toolbar sx={{ gap: 1, justifyContent: "flex-end" }}>
         <Box
           ref={rowRef}
           sx={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "flex-end",
             gap: `${NAV_GAP_PX}px`,
             minWidth: 0,
             flex: 1,
@@ -287,7 +290,8 @@ export function AppShellNav() {
           anchorEl={moreAnchor}
           open={Boolean(moreAnchor)}
           onClose={closeMore}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
         >
           {overflowItems.map((item) => renderOverflowItem(item))}
         </Menu>
@@ -296,7 +300,8 @@ export function AppShellNav() {
           anchorEl={langAnchor}
           open={Boolean(langAnchor)}
           onClose={closeLanguage}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
         >
           <MenuItem selected={language === "en"} onClick={() => selectLanguage("en")}>
             {t("language.en")}

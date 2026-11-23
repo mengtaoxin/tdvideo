@@ -112,18 +112,30 @@ describe("App shell", () => {
     expect(within(sample).getAllByText("可选").length).toBeGreaterThan(0);
   });
 
-  it("exposes all primary nav routes and a Feedback action", async () => {
+  it("exposes primary nav routes with overflow under More, plus Feedback", async () => {
+    const user = userEvent.setup();
     await renderAt("/");
     const nav = await screen.findByRole("banner");
+    const visibleRoutes = NAV_ITEMS.slice(0, 5);
+    const overflowRoutes = NAV_ITEMS.slice(5);
 
-    for (const item of NAV_ITEMS) {
+    for (const item of visibleRoutes) {
       expect(within(nav).getByRole("link", { name: i18n.t(item.labelKey) })).toHaveAttribute(
         "href",
         item.to,
       );
     }
 
-    expect(within(nav).getByRole("button", { name: "Feedback" })).toBeInTheDocument();
+    expect(within(nav).getByRole("button", { name: "More" })).toBeInTheDocument();
+    await user.click(within(nav).getByRole("button", { name: "More" }));
+
+    for (const item of overflowRoutes) {
+      expect(
+        await screen.findByRole("menuitem", { name: i18n.t(item.labelKey) }),
+      ).toBeInTheDocument();
+    }
+    expect(screen.getByRole("menuitem", { name: "Feedback" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Language" })).toBeInTheDocument();
   });
 
   it("opens the Feedback URL only after confirm", async () => {
@@ -131,7 +143,9 @@ describe("App shell", () => {
     const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
 
     await renderAt("/");
-    await user.click(await screen.findByRole("button", { name: "Feedback" }));
+    const nav = await screen.findByRole("banner");
+    await user.click(within(nav).getByRole("button", { name: "More" }));
+    await user.click(await screen.findByRole("menuitem", { name: "Feedback" }));
 
     expect(await screen.findByRole("dialog", { name: "Leave feedback?" })).toBeInTheDocument();
     expect(openSpy).not.toHaveBeenCalled();
@@ -140,33 +154,39 @@ describe("App shell", () => {
     expect(screen.queryByRole("dialog", { name: "Leave feedback?" })).not.toBeInTheDocument();
     expect(openSpy).not.toHaveBeenCalled();
 
-    await user.click(screen.getByRole("button", { name: "Feedback" }));
+    await user.click(within(nav).getByRole("button", { name: "More" }));
+    await user.click(await screen.findByRole("menuitem", { name: "Feedback" }));
     await user.click(await screen.findByRole("button", { name: "Continue" }));
 
     expect(openSpy).toHaveBeenCalledWith(FEEDBACK_URL, "_blank", "noopener,noreferrer");
   });
 
-  it("renders nav actions as left-aligned icon buttons without uppercase transform", async () => {
+  it("renders nav actions as right-aligned icon buttons without uppercase transform", async () => {
     await renderAt("/");
     const nav = await screen.findByRole("banner");
+    const toolbar = nav.querySelector(".MuiToolbar-root");
     const home = within(nav).getByRole("link", { name: "Home" });
 
+    expect(toolbar).toHaveStyle({ justifyContent: "flex-end" });
     expect(home.querySelector("svg")).toBeTruthy();
     expect(getComputedStyle(home).textTransform).toBe("none");
     expect(within(nav).queryByRole("combobox")).not.toBeInTheDocument();
-    expect(within(nav).getByRole("button", { name: "Language" })).toBeInTheDocument();
+    expect(within(nav).getByRole("button", { name: "More" })).toBeInTheDocument();
   });
 
   it("updates chrome strings when the language switches to zh", async () => {
     const user = userEvent.setup();
     await renderAt("/");
+    const nav = await screen.findByRole("banner");
 
-    await user.click(await screen.findByRole("button", { name: "Language" }));
+    await user.click(within(nav).getByRole("button", { name: "More" }));
+    await user.click(await screen.findByRole("menuitem", { name: "Language" }));
     await user.click(await screen.findByRole("menuitem", { name: "中文" }));
 
     expect(await screen.findByRole("link", { name: "首页" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "正在播放" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "反馈" })).toBeInTheDocument();
+    await user.click(within(nav).getByRole("button", { name: "更多" }));
+    expect(await screen.findByRole("menuitem", { name: "反馈" })).toBeInTheDocument();
   });
 
   it("shows the Now Playing empty-state CTAs", async () => {

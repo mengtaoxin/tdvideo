@@ -21,16 +21,22 @@ test.describe("tdvideo smoke", () => {
       { link: "Videos", heading: "Videos" },
       { link: "Playlists", heading: "Playlists" },
       { link: "Settings", heading: "Settings" },
-      { link: "About", heading: "About" },
+      { link: "About", heading: "About", overflow: true },
       {
         link: "Home",
         heading: "One read-only JSON file is your whole video library",
       },
     ] as const;
 
-    for (const { link, heading } of cases) {
-      await page.getByRole("banner").getByRole("link", { name: link }).click();
-      await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+    for (const item of cases) {
+      const banner = page.getByRole("banner");
+      if ("overflow" in item && item.overflow) {
+        await banner.getByRole("button", { name: "More" }).click();
+        await page.getByRole("menuitem", { name: item.link }).click();
+      } else {
+        await banner.getByRole("link", { name: item.link }).click();
+      }
+      await expect(page.getByRole("heading", { name: item.heading })).toBeVisible();
     }
   });
 

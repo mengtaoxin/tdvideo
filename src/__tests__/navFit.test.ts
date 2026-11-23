@@ -19,4 +19,14 @@ describe("fitVisibleCount", () => {
     expect(fitVisibleCount([40, 50, 60], 154, 48, 8)).toBe(2);
     expect(fitVisibleCount([40, 50, 60], 153, 48, 8)).toBe(1);
   });
+
+  it("caps visible items at maxVisible even when more would fit", () => {
+    expect(fitVisibleCount([40, 50, 60, 70, 80, 90], 1000, 48, 0, 5)).toBe(5);
+    expect(fitVisibleCount([40, 50, 60, 70, 80, 90], 1000, 48, 0, 3)).toBe(3);
+  });
+
+  it("still shrinks below maxVisible when width is tight", () => {
+    // five + More would need 40+50+60+70+80+48 = 348; two + More = 40+50+48 = 138
+    expect(fitVisibleCount([40, 50, 60, 70, 80, 90], 138, 48, 0, 5)).toBe(2);
+  });
 });
