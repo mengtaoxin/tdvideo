@@ -11,14 +11,61 @@
     "more": "更多"
   },
   "home": {
-    "brand": "tdvideo",
-    "tagline": "前端视频播放器",
+    "eyebrow": "个人视频播放器",
+    "title": "一个只读 JSON 文件，就是你的整座视频库",
+    "lead": "纯前端、无服务器：把视频和播放列表写进 configs.json，tdvideo 就把它变成完整的播放器——支持渐进式 MP4 或 HLS、可选 WebVTT 字幕与弹幕，并在本浏览器记住观看进度。",
     "goToVideos": "浏览视频",
     "goToPlaylists": "浏览播放列表",
+    "goToSettings": "在设置里填写配置地址",
     "continueWatching": "继续观看",
     "continueMeta": "{{type}} · {{progress}}",
     "typeVideo": "视频",
-    "typeList": "播放列表"
+    "typeList": "播放列表",
+    "sample": {
+      "badge": "只读 · 静态文件",
+      "required": "必填",
+      "optional": "可选",
+      "notes": {
+        "videos": "视频数组，主要的目录字段",
+        "id": "唯一标识，播放列表通过它引用视频",
+        "title": "显示标题，出现在视频列表与正在播放",
+        "url": "媒体地址（完整 URL 或站内路径，MP4 或 .m3u8）；跨域时需要 CORS",
+        "posterUrl": "视频画廊封面；省略时显示占位图",
+        "autoDisplaySubtitles": "开始播放时自动显示首选字幕",
+        "subtitles": "WebVTT 字幕轨道；没有可省略",
+        "subtitleId": "字幕轨道唯一 id",
+        "subtitleTitle": "字幕选择器中的名称",
+        "subtitleUrl": "WebVTT 文件地址或站内路径",
+        "subtitleLanguage": "轨道的 BCP 47 语言标签",
+        "subtitleDefault": "多条字幕时的首选轨道",
+        "moreSubtitles": "更多字幕轨道，结构相同",
+        "bulletComments": "按时间叠加的弹幕；不用可省略",
+        "bulletId": "弹幕轨道唯一 id",
+        "bulletTitle": "弹幕选择器中的名称",
+        "bulletUrl": "JSON 地址：{ time, text } 数组",
+        "moreVideos": "更多视频，结构相同",
+        "playlists": "播放列表数组；没有可省略",
+        "playlistId": "播放列表唯一 id",
+        "playlistTitle": "显示名称，出现在列表与正在播放",
+        "playlistPosterUrl": "播放列表画廊封面",
+        "playlistVideos": "引用上面 videos 的 id，顺序即播放顺序",
+        "morePlaylists": "更多播放列表，结构相同"
+      }
+    },
+    "features": {
+      "noServer": {
+        "title": "无需服务器",
+        "description": "tdvideo 是纯静态网站，只读取你的 JSON 和媒体文件。没有数据库、没有账号，也不上传任何内容。"
+      },
+      "yourData": {
+        "title": "片库在你手里",
+        "description": "改一个文件就能更新视频和播放列表。放在 GitHub Pages、对象存储或任意静态托管上，在设置里填上地址即可。"
+      },
+      "history": {
+        "title": "接着上次看",
+        "description": "视频与播放列表的观看进度保存在当前浏览器，首页可继续观看，无需后端。"
+      }
+    }
   },
   "nowPlaying": {
     "title": "正在播放",

@@ -64,9 +64,52 @@ describe("App shell", () => {
     );
   });
 
-  it("renders the tdvideo brand on Home", async () => {
+  it("leads Home with the configs.json catalog story", async () => {
     await renderAt("/");
-    expect(await screen.findByRole("heading", { name: "tdvideo" })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        name: "One read-only JSON file is your whole video library",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Browse videos" })).toHaveAttribute("href", "/videos");
+    expect(screen.getByRole("link", { name: "Browse playlists" })).toHaveAttribute(
+      "href",
+      "/playlists",
+    );
+  });
+
+  it("annotates every configs.json key with whether it is required", async () => {
+    await renderAt("/");
+    const sample = await screen.findByTestId("home-json-sample");
+    expect(within(sample).getByText("configs.json")).toBeInTheDocument();
+    for (const key of [
+      "videos",
+      "id",
+      "title",
+      "url",
+      "poster-url",
+      "autoDisplaySubtitles",
+      "subtitles",
+      "language",
+      "default",
+      "bullet-comments",
+      "playlists",
+    ]) {
+      expect(within(sample).getAllByText(`"${key}"`).length).toBeGreaterThan(0);
+    }
+    expect(within(sample).getAllByText("required").length).toBeGreaterThan(0);
+    expect(within(sample).getAllByText("optional").length).toBeGreaterThan(0);
+    expect(
+      within(sample).getByText("Unique key; playlists refer to videos by it"),
+    ).toBeInTheDocument();
+  });
+
+  it("shows configs.json sample annotations in Chinese", async () => {
+    await i18n.changeLanguage("zh");
+    await renderAt("/");
+    const sample = await screen.findByTestId("home-json-sample");
+    expect(within(sample).getAllByText("必填").length).toBeGreaterThan(0);
+    expect(within(sample).getAllByText("可选").length).toBeGreaterThan(0);
   });
 
   it("exposes all primary nav routes and a Feedback action", async () => {

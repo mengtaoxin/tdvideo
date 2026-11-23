@@ -11,14 +11,61 @@
     "more": "More"
   },
   "home": {
-    "brand": "tdvideo",
-    "tagline": "Frontend video player",
+    "eyebrow": "Personal video player",
+    "title": "One read-only JSON file is your whole video library",
+    "lead": "Pure front end, no server: list your videos and playlists in configs.json and tdvideo turns it into a full player — progressive MP4 or HLS, optional WebVTT subtitles and bullet comments, with continue-watching progress in this browser.",
     "goToVideos": "Browse videos",
     "goToPlaylists": "Browse playlists",
+    "goToSettings": "Point Settings at your file",
     "continueWatching": "Continue watching",
     "continueMeta": "{{type}} · {{progress}}",
     "typeVideo": "Video",
-    "typeList": "Playlist"
+    "typeList": "Playlist",
+    "sample": {
+      "badge": "read-only · static file",
+      "required": "required",
+      "optional": "optional",
+      "notes": {
+        "videos": "Your videos — the primary catalog array",
+        "id": "Unique key; playlists refer to videos by it",
+        "title": "Display title shown in Videos and Now Playing",
+        "url": "Media URL or site path (MP4 or .m3u8); needs CORS when cross-origin",
+        "posterUrl": "Poster for the Videos gallery; placeholder when omitted",
+        "autoDisplaySubtitles": "Show the preferred subtitle when playback starts",
+        "subtitles": "WebVTT tracks; leave out if you have none",
+        "subtitleId": "Unique subtitle track id",
+        "subtitleTitle": "Label in the subtitle picker",
+        "subtitleUrl": "WebVTT file URL or site path",
+        "subtitleLanguage": "BCP 47 language tag for the track",
+        "subtitleDefault": "Preferred track when several exist",
+        "moreSubtitles": "More subtitle tracks, same shape",
+        "bulletComments": "Timed overlay comments; leave out if unused",
+        "bulletId": "Unique bullet-comment track id",
+        "bulletTitle": "Label in the bullet-comment picker",
+        "bulletUrl": "JSON URL: array of { time, text }",
+        "moreVideos": "More videos, same shape",
+        "playlists": "Your playlists; leave out if you have none",
+        "playlistId": "Unique playlist id",
+        "playlistTitle": "Display name in Playlists and Now Playing",
+        "playlistPosterUrl": "Poster for the Playlists gallery",
+        "playlistVideos": "Video ids from videos[], in play order",
+        "morePlaylists": "More playlists, same shape"
+      }
+    },
+    "features": {
+      "noServer": {
+        "title": "No server",
+        "description": "tdvideo is a static site that only reads your JSON and media files. No database, no account, nothing uploaded."
+      },
+      "yourData": {
+        "title": "Your library, your file",
+        "description": "Edit one file to change videos and playlists. Host it on GitHub Pages, object storage, or any static host, then point Settings at it."
+      },
+      "history": {
+        "title": "Continue where you left off",
+        "description": "Watch progress for videos and playlists stays in this browser so Home can resume without a backend."
+      }
+    }
   },
   "nowPlaying": {
     "title": "Now Playing",

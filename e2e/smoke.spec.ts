@@ -10,7 +10,11 @@ test.describe("tdvideo smoke", () => {
   test("navigates primary routes from the top nav", async ({ page }) => {
     await page.goto("/");
     await waitForConfigsReady(page);
-    await expect(page.getByRole("heading", { name: "tdvideo" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        name: "One read-only JSON file is your whole video library",
+      }),
+    ).toBeVisible();
 
     const cases = [
       { link: "Now Playing", heading: "Now Playing" },
@@ -18,7 +22,10 @@ test.describe("tdvideo smoke", () => {
       { link: "Playlists", heading: "Playlists" },
       { link: "Settings", heading: "Settings" },
       { link: "About", heading: "About" },
-      { link: "Home", heading: "tdvideo" },
+      {
+        link: "Home",
+        heading: "One read-only JSON file is your whole video library",
+      },
     ] as const;
 
     for (const { link, heading } of cases) {

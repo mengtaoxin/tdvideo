@@ -33,6 +33,7 @@ tdvideo/
 | Concern                                    | Where                                                           |
 | ------------------------------------------ | --------------------------------------------------------------- |
 | New page / route                           | `src/routes/` (file-based; do not hand-edit `routeTree.gen.ts`) |
+| Home configs.json sample UI                | `src/components/ConfigJsonSample.tsx`                           |
 | Player UI                                  | `src/components/player/`                                        |
 | Catalog parse / fetch / cache              | `src/lib/configs/`                                              |
 | History types / formatting                 | `src/lib/history/`                                              |
