@@ -1,29 +1,5 @@
 # tdvideo
 
-Frontend-only online video player (Vite + React + TypeScript). No backend in this repo.
+tdvideo is an online video player that runs in your browser. Use it to watch videos and playlists from a catalog you provide, pick up where you left off, and keep a simple history of what you have been watching.
 
-## Requirements
-
-- **Node >=24**
-- **`NODE_AUTH_TOKEN`** — GitHub Packages auth for `@mengtaoxin/*` (see `.npmrc`)
-
-## Quick start
-
-```bash
-export NODE_AUTH_TOKEN=<github-pat-with-read:packages>
-npm install
-npm run dev
-```
-
-| Command          | Purpose                         |
-| ---------------- | ------------------------------- |
-| `npm run build`  | Type-check + production build   |
-| `npm run verify` | Lint, type-check, coverage, e2e |
-
-Full command list, stack, testing, and layout: see [`docs/`](./docs/) (`commands.md`, `tech-stack.md`, `testing.md`, `file-structure.md`).
-
-Agents: start with `npx evolving explain` (see [`AGENTS.md`](./AGENTS.md)).
-
-## Repository
-
-https://github.com/mengtaoxin/tdvideo
+The app lives entirely in the browser—there is no server of its own in this project. Point it at your video list, open a title or playlist, and play.

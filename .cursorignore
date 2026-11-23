@@ -1,0 +1,17 @@
+# Local env files (may contain secrets / tokens)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Certificates and private keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.p8
+
+# Common secret / credential dumps
+**/credentials.json
+**/secrets.json

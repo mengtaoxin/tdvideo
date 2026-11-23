@@ -1,0 +1,7 @@
+# Lock files: out of index, still readable by path
+package-lock.json
+skills-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lock
+bun.lockb

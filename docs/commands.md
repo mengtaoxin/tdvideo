@@ -1,6 +1,6 @@
 # Commands
 
-Node **>=24**. Private packages (`@mengtaoxin/*`) install via GitHub Packages; set `NODE_AUTH_TOKEN` before `npm install` (see `.npmrc`).
+Node **>=24**. Private `@mengtaoxin/*` packages need `NODE_AUTH_TOKEN` before `npm install` (see `.npmrc`).
 
 ## Install
 
@@ -30,7 +30,7 @@ npm install
 
 ## Test and verify
 
-Testing commands (unit, coverage, e2e) and how to use them: see [testing.md](./testing.md).
+Unit, coverage, and e2e: see [testing.md](./testing.md).
 
 | Command          | Purpose                                                              |
 | ---------------- | -------------------------------------------------------------------- |
@@ -42,4 +42,4 @@ Testing commands (unit, coverage, e2e) and how to use them: see [testing.md](./t
 npx evolving explain
 ```
 
-Shows the progressive stages defined in `evolving.yml` (orient → edit → prepare → verify → docs).
+Progressive stages live in `evolving.yml` (orient → edit → prepare → verify → docs). After edits: `npx evolving run prepare`, then `npx evolving run verify`. On failure or a truncated view: `npx evolving status`.
