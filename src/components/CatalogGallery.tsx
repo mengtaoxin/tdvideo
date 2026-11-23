@@ -32,6 +32,7 @@ export function CatalogGallery({ label, items, onOpen }: CatalogGalleryProps) {
       sx={{
         display: "flex",
         flexWrap: "wrap",
+        justifyContent: "center",
         gap: `${CATALOG_GALLERY_GAP_PX}px`,
         listStyle: "none",
         margin: 0,

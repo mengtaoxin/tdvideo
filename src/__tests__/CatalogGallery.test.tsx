@@ -30,11 +30,12 @@ function renderGallery() {
 }
 
 describe("CatalogGallery", () => {
-  it("lays out fixed-size 16:9 posters in a flex wrap row", () => {
+  it("lays out fixed-size 16:9 posters in a centered flex wrap row", () => {
     renderGallery();
     const gallery = screen.getByRole("list", { name: "Videos" });
     expect(getComputedStyle(gallery).display).toBe("flex");
     expect(getComputedStyle(gallery).flexWrap).toBe("wrap");
+    expect(getComputedStyle(gallery).justifyContent).toBe("center");
 
     const item = within(gallery).getByRole("listitem");
     expect(getComputedStyle(item).flexGrow).toBe("0");

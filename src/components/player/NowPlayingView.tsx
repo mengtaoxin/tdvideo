@@ -30,10 +30,8 @@ function NowPlayingEmptyState() {
   const { t } = useTranslation();
 
   return (
-    <>
-      <Typography color="text.secondary" sx={{ mb: 2 }}>
-        {t("nowPlaying.empty")}
-      </Typography>
+    <Stack spacing={2} sx={{ alignItems: "center", textAlign: "center" }}>
+      <Typography color="text.secondary">{t("nowPlaying.empty")}</Typography>
       <Stack direction="row" spacing={1}>
         <Button component={RouterLink} to="/videos" variant="contained">
           {t("nowPlaying.goToVideos")}
@@ -42,7 +40,7 @@ function NowPlayingEmptyState() {
           {t("nowPlaying.goToPlaylists")}
         </Button>
       </Stack>
-    </>
+    </Stack>
   );
 }
 
@@ -107,7 +105,10 @@ export function NowPlayingView() {
         <Stack
           direction={{ xs: "column", md: "row" }}
           spacing={3}
-          sx={{ alignItems: { md: "flex-start" } }}
+          sx={{
+            alignItems: { xs: "stretch", md: "flex-start" },
+            justifyContent: "center",
+          }}
         >
           <Box
             sx={{

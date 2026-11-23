@@ -151,13 +151,30 @@ export function VideoJsStage({
     <VideoPlayer key={src} title={title}>
       <HistoryProgressSync key={historyTargetKey(historyTarget)} target={historyTarget} />
       <HistoryResumeSeek key={`resume:${resumeProgress}`} progress={resumeProgress} />
-      <Box ref={widthRef} sx={{ width: "100%", minWidth: 0 }}>
+      <Box
+        ref={widthRef}
+        sx={{
+          width: "100%",
+          minWidth: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <Box sx={{ position: "relative", maxWidth: "100%", ...frameSx }}>
           <VideoSkin style={{ width: "100%", height: "100%" }}>{media}</VideoSkin>
           <BulletCommentOverlay comments={bulletComments} enabled={bulletCommentsEnabled} />
         </Box>
       </Box>
-      <Box ref={toolbarRef} sx={{ mt: 2 }}>
+      <Box
+        ref={toolbarRef}
+        sx={{
+          mt: 2,
+          width: frameSize?.width ?? "100%",
+          maxWidth: "100%",
+          mx: "auto",
+        }}
+      >
         <PlaybackControls
           autoDisplaySubtitles={autoDisplaySubtitles}
           hasSubtitles={subtitles.length > 0}
