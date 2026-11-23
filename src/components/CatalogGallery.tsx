@@ -28,7 +28,7 @@ export function CatalogGallery({ label, items, onOpen }: CatalogGalleryProps) {
   return (
     <ImageList cols={cols} gap={16} aria-label={label} sx={{ margin: 0 }}>
       {items.map((item) => (
-        <ImageListItem key={item.id} sx={{ overflow: "hidden", borderRadius: 3 }}>
+        <ImageListItem key={item.id}>
           <ButtonBase
             onClick={() => onOpen(item.id)}
             sx={{
@@ -38,29 +38,31 @@ export function CatalogGallery({ label, items, onOpen }: CatalogGalleryProps) {
               color: "inherit",
             }}
           >
-            {item.posterUrl ? (
-              <Box
-                component="img"
-                src={item.posterUrl}
-                alt={item.title}
-                loading="lazy"
-                sx={{
-                  display: "block",
-                  width: "100%",
-                  aspectRatio: "16 / 9",
-                  objectFit: "cover",
-                }}
-              />
-            ) : (
-              <Box
-                aria-hidden
-                sx={{
-                  width: "100%",
-                  aspectRatio: "16 / 9",
-                  bgcolor: "action.hover",
-                }}
-              />
-            )}
+            <Box sx={{ overflow: "hidden", borderRadius: 3, width: "100%" }}>
+              {item.posterUrl ? (
+                <Box
+                  component="img"
+                  src={item.posterUrl}
+                  alt={item.title}
+                  loading="lazy"
+                  sx={{
+                    display: "block",
+                    width: "100%",
+                    aspectRatio: "16 / 9",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <Box
+                  aria-hidden
+                  sx={{
+                    width: "100%",
+                    aspectRatio: "16 / 9",
+                    bgcolor: "action.hover",
+                  }}
+                />
+              )}
+            </Box>
             <ImageListItemBar title={item.title} subtitle={item.meta} position="below" />
           </ButtonBase>
         </ImageListItem>
