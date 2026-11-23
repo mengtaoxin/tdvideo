@@ -2,10 +2,12 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { useBulletComments } from "@/components/player/useBulletComments";
+import { useResolvedSubtitles } from "@/components/player/useResolvedSubtitles";
 import { useResumeProgress } from "@/components/player/useResumeProgress";
 import * as database from "@/db/database";
 import { upsertHistoryEntry } from "@/db/database";
 import type { BulletComment } from "@/lib/playback";
+import type { SubtitleTrack } from "@/lib/configs";
 
 describe("useResumeProgress", () => {
   it("returns 0 when there is no session", () => {
@@ -190,5 +192,132 @@ describe("useBulletComments", () => {
       result.current.setBulletCommentsEnabled(false);
     });
     expect(result.current.bulletCommentsEnabled).toBe(false);
+  });
+});
+
+describe("useResolvedSubtitles", () => {
+  const vttTrack: SubtitleTrack = {
+    id: "vtt",
+    title: "EN",
+    url: "/subs/en.vtt",
+    language: "en",
+  };
+  const srtTrack: SubtitleTrack = {
+    id: "srt",
+    title: "ZH",
+    url: "/subs/zh.srt",
+    language: "zh",
+    default: true,
+  };
+
+  it("returns empty tracks when there are none", () => {
+    const { result } = renderHook(() => useResolvedSubtitles([], "fallback"));
+    expect(result.current.subtitles).toEqual([]);
+    expect(result.current.subtitleError).toBeNull();
+  });
+
+  it("passes through vtt urls and converts srt to a blob url", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        text: () => Promise.resolve("1\n00:00:00,000 --> 00:00:01,000\nHi\n"),
+      }),
+    );
+    vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:resolved-srt");
+
+    const { result } = renderHook(() => useResolvedSubtitles([vttTrack, srtTrack], "fallback"));
+
+    await waitFor(() => {
+      expect(result.current.subtitles).toEqual([
+        vttTrack,
+        { ...srtTrack, url: "blob:resolved-srt" },
+      ]);
+    });
+    expect(result.current.subtitleError).toBeNull();
+  });
+
+  it("keeps non-srt tracks and surfaces an error when srt fetch fails", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+      }),
+    );
+
+    const { result } = renderHook(() => useResolvedSubtitles([vttTrack, srtTrack], "fallback"));
+
+    await waitFor(() => {
+      expect(result.current.subtitleError).toMatch(/Failed to fetch subtitle/);
+    });
+    expect(result.current.subtitles).toEqual([vttTrack]);
+  });
+
+  it("revokes blob urls on unmount", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        text: () => Promise.resolve("1\n00:00:00,000 --> 00:00:01,000\nHi\n"),
+      }),
+    );
+    vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:to-revoke");
+    const revoke = vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => undefined);
+
+    const { result, unmount } = renderHook(() => useResolvedSubtitles([srtTrack], "fallback"));
+
+    await waitFor(() => {
+      expect(result.current.subtitles[0]?.url).toBe("blob:to-revoke");
+    });
+
+    unmount();
+    expect(revoke).toHaveBeenCalledWith("blob:to-revoke");
+  });
+
+  it("ignores aborted in-flight resolve when tracks change", async () => {
+    let resolveFirst: ((value: { ok: boolean; text: () => Promise<string> }) => void) | undefined;
+    const firstResponse = new Promise<{ ok: boolean; text: () => Promise<string> }>((resolve) => {
+      resolveFirst = resolve;
+    });
+
+    const fetchMock = vi.fn((url: string) => {
+      if (url === "/slow.srt") {
+        return firstResponse;
+      }
+      return Promise.resolve({
+        ok: true,
+        text: () => Promise.resolve("1\n00:00:00,000 --> 00:00:01,000\nFast\n"),
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    vi.spyOn(URL, "createObjectURL").mockImplementation((blob) => {
+      void blob;
+      return `blob:${String(fetchMock.mock.calls.length)}`;
+    });
+
+    const slow: SubtitleTrack = { ...srtTrack, id: "slow", url: "/slow.srt" };
+    const fast: SubtitleTrack = { ...srtTrack, id: "fast", url: "/fast.srt" };
+
+    const { result, rerender } = renderHook(
+      ({ tracks }) => useResolvedSubtitles(tracks, "fallback"),
+      { initialProps: { tracks: [slow] as readonly SubtitleTrack[] } },
+    );
+
+    rerender({ tracks: [fast] });
+
+    await waitFor(() => {
+      expect(result.current.subtitles).toHaveLength(1);
+      expect(result.current.subtitles[0]?.id).toBe("fast");
+    });
+
+    act(() => {
+      resolveFirst?.({
+        ok: true,
+        text: () => Promise.resolve("1\n00:00:00,000 --> 00:00:01,000\nStale\n"),
+      });
+    });
+
+    expect(result.current.subtitles[0]?.id).toBe("fast");
   });
 });

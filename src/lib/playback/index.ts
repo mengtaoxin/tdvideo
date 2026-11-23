@@ -12,3 +12,4 @@ export {
 export type { QuickPlayErrorCode, QuickPlayPlan, QuickPlaySearch } from "./quickPlay";
 export { resolvePlayback } from "./resolve";
 export type { PlaybackSession, ResolvedPlayback } from "./resolve";
+export { isSrtUrl, resolveSubtitleSrc, srtToWebVtt } from "./subtitles";

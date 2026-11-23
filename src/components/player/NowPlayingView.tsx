@@ -16,6 +16,7 @@ import { usePlaybackStore } from "@/stores/playbackStore";
 import type { HistoryTarget } from "./HistoryProgressSync";
 import { PlaylistSidebar } from "./PlaylistSidebar";
 import { useBulletComments } from "./useBulletComments";
+import { useResolvedSubtitles } from "./useResolvedSubtitles";
 import { useResumeProgress } from "./useResumeProgress";
 import { VideoJsStage } from "./VideoJsStage";
 
@@ -94,6 +95,10 @@ export function NowPlayingView() {
   const resumeProgress = useResumeProgress(session);
   const { bulletComments, bulletCommentsEnabled, setBulletCommentsEnabled, bulletError } =
     useBulletComments(bulletTrackUrl, t("nowPlaying.bulletLoadError"));
+  const { subtitles, subtitleError } = useResolvedSubtitles(
+    video?.subtitles,
+    t("nowPlaying.subtitleLoadError"),
+  );
 
   const videosById = new Map((catalog?.videos ?? []).map((item) => [item.id, item]));
 
@@ -134,10 +139,15 @@ export function NowPlayingView() {
                 {bulletError}
               </Alert>
             ) : null}
+            {subtitleError ? (
+              <Alert severity="warning" sx={{ mb: 2 }}>
+                {subtitleError}
+              </Alert>
+            ) : null}
             <VideoJsStage
               src={video.url}
               title={video.title}
-              subtitles={video.subtitles}
+              subtitles={subtitles}
               autoDisplaySubtitles={video.autoDisplaySubtitles === true}
               bulletComments={bulletComments}
               bulletCommentsEnabled={bulletCommentsEnabled}
