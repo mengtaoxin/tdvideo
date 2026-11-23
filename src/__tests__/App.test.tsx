@@ -78,12 +78,23 @@ describe("App shell", () => {
     );
   });
 
+  it("renders nav actions as left-aligned icon buttons without uppercase transform", async () => {
+    await renderAt("/");
+    const nav = await screen.findByRole("banner");
+    const home = within(nav).getByRole("link", { name: "Home" });
+
+    expect(home.querySelector("svg")).toBeTruthy();
+    expect(getComputedStyle(home).textTransform).toBe("none");
+    expect(within(nav).queryByRole("combobox")).not.toBeInTheDocument();
+    expect(within(nav).getByRole("button", { name: "Language" })).toBeInTheDocument();
+  });
+
   it("updates chrome strings when the language switches to zh", async () => {
     const user = userEvent.setup();
     await renderAt("/");
 
-    await user.click(await screen.findByRole("combobox", { name: "Language" }));
-    await user.click(await screen.findByRole("option", { name: "中文" }));
+    await user.click(await screen.findByRole("button", { name: "Language" }));
+    await user.click(await screen.findByRole("menuitem", { name: "中文" }));
 
     expect(await screen.findByRole("link", { name: "首页" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "正在播放" })).toBeInTheDocument();
