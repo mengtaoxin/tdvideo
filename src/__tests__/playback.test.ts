@@ -3,12 +3,14 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import {
   ALL_VIDEOS_PLAYLIST_ID,
+  AUDIO_DRIFT_THRESHOLD_SECONDS,
   commentsVisibleAt,
   isHlsUrl,
   parseBulletComments,
   parseQuickPlaySearch,
   planQuickPlay,
   resolvePlayback,
+  shouldResyncExternalAudio,
 } from "../lib/playback";
 import type { ConfigsCatalog } from "../lib/configs";
 import { usePlaybackStore } from "../stores/playbackStore";
@@ -22,6 +24,7 @@ const catalog: ConfigsCatalog = {
       autoDisplaySubtitles: true,
       subtitles: [{ id: "s1", title: "EN", url: "/a.vtt", language: "en", default: true }],
       bulletComments: [{ id: "b1", title: "Main", url: "/bullets.json" }],
+      audioTracks: [],
     },
     {
       id: "v2",
@@ -29,6 +32,7 @@ const catalog: ConfigsCatalog = {
       url: "https://example.com/b.m3u8",
       subtitles: [],
       bulletComments: [],
+      audioTracks: [],
     },
   ],
   playlists: [
@@ -74,6 +78,14 @@ describe("commentsVisibleAt", () => {
     expect(commentsVisibleAt(comments, 4.2, 3)).toEqual([{ time: 4, text: "b" }]);
     expect(commentsVisibleAt(comments, 5.5, 3)).toEqual([{ time: 4, text: "b" }]);
     expect(commentsVisibleAt(comments, 3.9, 3)).toEqual([{ time: 1, text: "a" }]);
+  });
+});
+
+describe("shouldResyncExternalAudio", () => {
+  it("resyncs when drift exceeds the threshold", () => {
+    expect(shouldResyncExternalAudio(1, 1 + AUDIO_DRIFT_THRESHOLD_SECONDS + 0.01)).toBe(true);
+    expect(shouldResyncExternalAudio(1, 1 + AUDIO_DRIFT_THRESHOLD_SECONDS - 0.01)).toBe(false);
+    expect(shouldResyncExternalAudio(1, 1.1)).toBe(false);
   });
 });
 

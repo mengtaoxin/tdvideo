@@ -1,10 +1,16 @@
+import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import SvgIcon, { type SvgIconProps } from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import { useCaptionsOptions } from "@videojs/react";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+
+import { EMBEDDED_AUDIO_ID, type AudioTrackConfig } from "@/lib/configs";
 
 const OFF_VALUE = "off";
 
@@ -24,12 +30,18 @@ export function PlaybackControls({
   bulletCommentsEnabled,
   onBulletCommentsEnabledChange,
   hasBulletComments,
+  audioTracks,
+  selectedAudioId,
+  onSelectedAudioIdChange,
 }: {
   autoDisplaySubtitles: boolean;
   hasSubtitles: boolean;
   bulletCommentsEnabled: boolean;
   onBulletCommentsEnabledChange: (enabled: boolean) => void;
   hasBulletComments: boolean;
+  audioTracks: readonly AudioTrackConfig[];
+  selectedAudioId: string;
+  onSelectedAudioIdChange: (id: string) => void;
 }) {
   const { t } = useTranslation();
   const captions = useCaptionsOptions();
@@ -47,9 +59,11 @@ export function PlaybackControls({
 
   const label = t("nowPlaying.bulletComments");
   const toggleLabel = t("nowPlaying.bulletCommentsToggle");
+  const audioLabel = t("nowPlaying.audioTrack");
+  const showAudioSelect = audioTracks.length > 0;
 
   return (
-    <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
+    <Stack direction="row" spacing={0.5} sx={{ alignItems: "center", flexWrap: "wrap", gap: 1 }}>
       <Tooltip title={label}>
         <span>
           <IconButton
@@ -64,6 +78,25 @@ export function PlaybackControls({
           </IconButton>
         </span>
       </Tooltip>
+      {showAudioSelect ? (
+        <FormControl size="small" sx={{ minWidth: 140 }}>
+          <InputLabel id="tdvideo-audio-track-label">{audioLabel}</InputLabel>
+          <Select
+            labelId="tdvideo-audio-track-label"
+            id="tdvideo-audio-track"
+            label={audioLabel}
+            value={selectedAudioId}
+            onChange={(event) => onSelectedAudioIdChange(event.target.value)}
+          >
+            <MenuItem value={EMBEDDED_AUDIO_ID}>{t("nowPlaying.audioTrackOriginal")}</MenuItem>
+            {audioTracks.map((track) => (
+              <MenuItem key={track.id} value={track.id}>
+                {track.title}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ) : null}
     </Stack>
   );
 }

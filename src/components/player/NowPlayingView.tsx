@@ -7,18 +7,23 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { Link as RouterLink } from "@tanstack/react-router";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import type { AudioTrackConfig } from "@/lib/configs";
 import { resolvePlayback, type PlaybackSession } from "@/lib/playback";
 import { useConfigsStore } from "@/stores/configsStore";
 import { usePlaybackStore } from "@/stores/playbackStore";
 
 import type { HistoryTarget } from "./HistoryProgressSync";
 import { PlaylistSidebar } from "./PlaylistSidebar";
+import { useAudioTrackSelection } from "./useAudioTrackSelection";
 import { useBulletComments } from "./useBulletComments";
 import { useResolvedSubtitles } from "./useResolvedSubtitles";
 import { useResumeProgress } from "./useResumeProgress";
 import { VideoJsStage } from "./VideoJsStage";
+
+const EMPTY_AUDIO_TRACKS: readonly AudioTrackConfig[] = [];
 
 function toHistoryTarget(session: PlaybackSession, index: number | undefined): HistoryTarget {
   if (session.type === "video") {
@@ -99,6 +104,16 @@ export function NowPlayingView() {
     video?.subtitles,
     t("nowPlaying.subtitleLoadError"),
   );
+  const audioTracks = video?.audioTracks ?? EMPTY_AUDIO_TRACKS;
+  const { selectedId: selectedAudioId, setSelectedId: setSelectedAudioId } =
+    useAudioTrackSelection(audioTracks);
+  const [audioError, setAudioError] = useState<string | null>(null);
+  const audioTracksKey = audioTracks.map((track) => track.id).join("\0");
+  const [prevAudioTracksKey, setPrevAudioTracksKey] = useState(audioTracksKey);
+  if (audioTracksKey !== prevAudioTracksKey) {
+    setPrevAudioTracksKey(audioTracksKey);
+    setAudioError(null);
+  }
 
   const videosById = new Map((catalog?.videos ?? []).map((item) => [item.id, item]));
 
@@ -144,11 +159,25 @@ export function NowPlayingView() {
                 {subtitleError}
               </Alert>
             ) : null}
+            {audioError ? (
+              <Alert severity="warning" sx={{ mb: 2 }}>
+                {audioError}
+              </Alert>
+            ) : null}
             <VideoJsStage
               src={video.url}
               title={video.title}
               subtitles={subtitles}
               autoDisplaySubtitles={video.autoDisplaySubtitles === true}
+              audioTracks={audioTracks}
+              selectedAudioId={selectedAudioId}
+              onSelectedAudioIdChange={(id) => {
+                setAudioError(null);
+                setSelectedAudioId(id);
+              }}
+              onExternalAudioError={() => {
+                setAudioError(t("nowPlaying.audioLoadError"));
+              }}
               bulletComments={bulletComments}
               bulletCommentsEnabled={bulletCommentsEnabled}
               onBulletCommentsEnabledChange={setBulletCommentsEnabled}

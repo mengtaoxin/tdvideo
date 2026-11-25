@@ -211,6 +211,42 @@ const subtitleTrack: SampleNode = {
   ],
 };
 
+const audioTrack: SampleNode = {
+  type: "object",
+  fields: [
+    {
+      key: "id",
+      value: { type: "primitive", value: "director" },
+      tag: "required",
+      noteKey: "audioId",
+    },
+    {
+      key: "title",
+      value: { type: "primitive", value: "Director commentary" },
+      tag: "required",
+      noteKey: "audioTitle",
+    },
+    {
+      key: "url",
+      value: { type: "primitive", value: "/audio/director.mp3" },
+      tag: "required",
+      noteKey: "audioUrl",
+    },
+    {
+      key: "language",
+      value: { type: "primitive", value: "en" },
+      tag: "optional",
+      noteKey: "audioLanguage",
+    },
+    {
+      key: "default",
+      value: { type: "primitive", value: false },
+      tag: "optional",
+      noteKey: "audioDefault",
+    },
+  ],
+};
+
 const bulletTrack: SampleNode = {
   type: "object",
   fields: [
@@ -276,6 +312,16 @@ const videoItem: SampleNode = {
         type: "array",
         items: [subtitleTrack],
         fold: { text: "{ … }", noteKey: "moreSubtitles" },
+      },
+    },
+    {
+      key: "audioTracks",
+      tag: "optional",
+      noteKey: "audioTracks",
+      value: {
+        type: "array",
+        items: [audioTrack],
+        fold: { text: "{ … }", noteKey: "moreAudioTracks" },
       },
     },
     {

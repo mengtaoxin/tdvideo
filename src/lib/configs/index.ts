@@ -1,5 +1,5 @@
 import { readCachedConfigsResponse, writeCachedConfigsResponse } from "./cache";
-import { normalizeConfigs, selectDefaultSubtitle } from "./normalize";
+import { normalizeConfigs } from "./normalize";
 import type { ConfigsCatalog } from "./types";
 
 export {
@@ -10,8 +10,15 @@ export {
   readCachedConfigsResponse,
   writeCachedConfigsResponse,
 } from "./cache";
-export { normalizeConfigs, selectDefaultSubtitle };
+export {
+  EMBEDDED_AUDIO_ID,
+  normalizeConfigs,
+  selectDefaultAudio,
+  selectDefaultSubtitle,
+} from "./normalize";
+export type { AudioSelection } from "./normalize";
 export type {
+  AudioTrackConfig,
   BulletCommentTrack,
   ConfigsCatalog,
   PlaylistConfig,

@@ -6,6 +6,7 @@ import {
   fetchConfigs,
   isConfigsRuntimeCacheUrl,
   normalizeConfigs,
+  selectDefaultAudio,
   selectDefaultSubtitle,
   type RawConfigs,
 } from "../lib/configs";
@@ -87,6 +88,102 @@ describe("normalizeConfigs", () => {
     ]);
   });
 
+  it("maps audioTracks / audio-tracks, dedupes by id, and defaults to empty", () => {
+    const raw: RawConfigs = {
+      videos: [
+        {
+          id: "v1",
+          title: "With audio",
+          url: "https://example.com/a.mp4",
+          audioTracks: [
+            {
+              id: "a1",
+              title: "Director",
+              url: "/fixtures/demo-audio.wav",
+              language: "en",
+              default: true,
+            },
+            {
+              id: "a1",
+              title: "Dup",
+              url: "/fixtures/other.wav",
+              language: "zh",
+            },
+          ],
+        },
+        {
+          id: "v2",
+          title: "Kebab audio",
+          url: "https://example.com/b.mp4",
+          "audio-tracks": [{ id: "a2", title: "Commentary", url: "/fixtures/demo-audio.wav" }],
+        },
+        {
+          id: "v3",
+          title: "No audio",
+          url: "https://example.com/c.mp4",
+        },
+      ],
+      playlists: [],
+    };
+
+    const result = normalizeConfigs(raw);
+
+    expect(result.videos[0]?.audioTracks).toEqual([
+      {
+        id: "a1",
+        title: "Director",
+        url: "/fixtures/demo-audio.wav",
+        language: "en",
+        default: true,
+      },
+    ]);
+    expect(result.videos[1]?.audioTracks).toEqual([
+      { id: "a2", title: "Commentary", url: "/fixtures/demo-audio.wav", language: "" },
+    ]);
+    expect(result.videos[2]?.audioTracks).toEqual([]);
+  });
+
+  it("rejects empty audio track id/title/url", () => {
+    expect(() =>
+      normalizeConfigs({
+        videos: [
+          {
+            id: "v1",
+            title: "Bad audio",
+            url: "https://example.com/a.mp4",
+            audioTracks: [{ id: "", title: "X", url: "/a.mp3" }],
+          },
+        ],
+      }),
+    ).toThrow(/audio/i);
+
+    expect(() =>
+      normalizeConfigs({
+        videos: [
+          {
+            id: "v1",
+            title: "Bad audio",
+            url: "https://example.com/a.mp4",
+            audioTracks: [{ id: "a1", title: "", url: "/a.mp3" }],
+          },
+        ],
+      }),
+    ).toThrow(/audio/i);
+
+    expect(() =>
+      normalizeConfigs({
+        videos: [
+          {
+            id: "v1",
+            title: "Bad audio",
+            url: "https://example.com/a.mp4",
+            audioTracks: [{ id: "a1", title: "X", url: "" }],
+          },
+        ],
+      }),
+    ).toThrow(/audio/i);
+  });
+
   it("maps poster-url onto videos and playlists", () => {
     const raw: RawConfigs = {
       videos: [
@@ -155,6 +252,34 @@ describe("selectDefaultSubtitle", () => {
 
   it("returns undefined for an empty list", () => {
     expect(selectDefaultSubtitle([])).toBeUndefined();
+  });
+});
+
+describe("selectDefaultAudio", () => {
+  it("selects the first default:true external track", () => {
+    const selection = selectDefaultAudio([
+      { id: "a", title: "A", url: "/a.mp3", language: "en" },
+      { id: "b", title: "B", url: "/b.mp3", language: "zh", default: true },
+      { id: "c", title: "C", url: "/c.mp3", language: "en", default: true },
+    ]);
+
+    expect(selection).toEqual({
+      kind: "external",
+      track: { id: "b", title: "B", url: "/b.mp3", language: "zh", default: true },
+    });
+  });
+
+  it("selects embedded when no external default:true", () => {
+    expect(
+      selectDefaultAudio([
+        { id: "a", title: "A", url: "/a.mp3", language: "en" },
+        { id: "b", title: "B", url: "/b.mp3", language: "zh", default: false },
+      ]),
+    ).toEqual({ kind: "embedded" });
+  });
+
+  it("selects embedded for an empty list", () => {
+    expect(selectDefaultAudio([])).toEqual({ kind: "embedded" });
   });
 });
 

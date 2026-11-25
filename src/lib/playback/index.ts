@@ -1,3 +1,4 @@
+export { AUDIO_DRIFT_THRESHOLD_SECONDS, shouldResyncExternalAudio } from "./audioTracks";
 export { commentsVisibleAt, fetchBulletComments, parseBulletComments } from "./bullets";
 export type { BulletComment } from "./bullets";
 export { STAGE_ASPECT_RATIO, availableStageHeight, fitStageSize } from "./fitStageSize";

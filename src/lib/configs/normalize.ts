@@ -1,7 +1,9 @@
 import type {
+  AudioTrackConfig,
   BulletCommentTrack,
   ConfigsCatalog,
   PlaylistConfig,
+  RawAudioTrack,
   RawBulletCommentTrack,
   RawConfigs,
   RawPlaylist,
@@ -10,6 +12,10 @@ import type {
   SubtitleTrack,
   VideoConfig,
 } from "./types";
+
+export type AudioSelection = { kind: "embedded" } | { kind: "external"; track: AudioTrackConfig };
+
+export const EMBEDDED_AUDIO_ID = "embedded";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -47,6 +53,16 @@ function normalizeSubtitle(raw: RawSubtitleTrack): SubtitleTrack {
   };
 }
 
+function normalizeAudioTrack(raw: RawAudioTrack): AudioTrackConfig {
+  return {
+    id: requireString(raw.id, "audio-track.id"),
+    title: requireString(raw.title, "audio-track.title"),
+    url: requireString(raw.url, "audio-track.url"),
+    language: typeof raw.language === "string" ? raw.language : "",
+    ...(raw.default === true ? { default: true } : {}),
+  };
+}
+
 function normalizeBullet(raw: RawBulletCommentTrack): BulletCommentTrack {
   return {
     id: requireString(raw.id, "bullet-comment.id"),
@@ -65,8 +81,12 @@ function optionalPosterUrl(raw: { "poster-url"?: string; posterUrl?: string }): 
 
 function normalizeVideo(raw: RawVideo): VideoConfig {
   const rawBullets = raw["bullet-comments"] ?? raw.bulletComments ?? [];
+  const rawAudioTracks = raw["audio-tracks"] ?? raw.audioTracks ?? [];
   const subtitles = Array.isArray(raw.subtitles)
     ? dedupeById(raw.subtitles.map(normalizeSubtitle))
+    : [];
+  const audioTracks = Array.isArray(rawAudioTracks)
+    ? dedupeById(rawAudioTracks.map(normalizeAudioTrack))
     : [];
   const bulletComments = Array.isArray(rawBullets)
     ? dedupeById(rawBullets.map(normalizeBullet))
@@ -80,6 +100,7 @@ function normalizeVideo(raw: RawVideo): VideoConfig {
     ...(posterUrl ? { posterUrl } : {}),
     ...(raw.autoDisplaySubtitles === true ? { autoDisplaySubtitles: true } : {}),
     subtitles,
+    audioTracks,
     bulletComments,
   };
 }
@@ -120,6 +141,15 @@ export function selectDefaultSubtitle(
     return preferred;
   }
   return subtitles[0];
+}
+
+/** Prefer the first external `default: true` track; otherwise the embedded track. */
+export function selectDefaultAudio(audioTracks: readonly AudioTrackConfig[]): AudioSelection {
+  const preferred = audioTracks.find((track) => track.default === true);
+  if (preferred) {
+    return { kind: "external", track: preferred };
+  }
+  return { kind: "embedded" };
 }
 
 export function normalizeConfigs(raw: unknown): ConfigsCatalog {

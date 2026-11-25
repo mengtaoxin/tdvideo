@@ -72,6 +72,33 @@ describe("config JSON sample catalog", () => {
         fold: "{ … }",
       },
       {
+        key: "audioTracks",
+        tag: "optional",
+        noteKey: noteKeyPath("audioTracks"),
+        fold: undefined,
+      },
+      { key: "id", tag: "required", noteKey: noteKeyPath("audioId"), fold: undefined },
+      { key: "title", tag: "required", noteKey: noteKeyPath("audioTitle"), fold: undefined },
+      { key: "url", tag: "required", noteKey: noteKeyPath("audioUrl"), fold: undefined },
+      {
+        key: "language",
+        tag: "optional",
+        noteKey: noteKeyPath("audioLanguage"),
+        fold: undefined,
+      },
+      {
+        key: "default",
+        tag: "optional",
+        noteKey: noteKeyPath("audioDefault"),
+        fold: undefined,
+      },
+      {
+        key: undefined,
+        tag: undefined,
+        noteKey: noteKeyPath("moreAudioTracks"),
+        fold: "{ … }",
+      },
+      {
         key: "bullet-comments",
         tag: "optional",
         noteKey: noteKeyPath("bulletComments"),

@@ -44,9 +44,9 @@ file, then stops. It is **not** Cursor's Plan mode.
 
 ### Statuses
 
-| Status | Meaning |
-| --- | --- |
-| `draft` | Requirement understood, but open questions remain |
+| Status  | Meaning                                                                 |
+| ------- | ----------------------------------------------------------------------- |
+| `draft` | Requirement understood, but open questions remain                       |
 | `ready` | No open questions left; spec is executable by a later agent or the user |
 
 `ready` specs are the end state of this skill. Do not start implementation

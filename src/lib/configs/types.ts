@@ -6,6 +6,14 @@ export interface SubtitleTrack {
   default?: boolean;
 }
 
+export interface AudioTrackConfig {
+  id: string;
+  title: string;
+  url: string;
+  language: string;
+  default?: boolean;
+}
+
 export interface BulletCommentTrack {
   id: string;
   title: string;
@@ -19,6 +27,7 @@ export interface VideoConfig {
   posterUrl?: string;
   autoDisplaySubtitles?: boolean;
   subtitles: SubtitleTrack[];
+  audioTracks: AudioTrackConfig[];
   bulletComments: BulletCommentTrack[];
 }
 
@@ -42,6 +51,14 @@ export interface RawSubtitleTrack {
   default?: boolean;
 }
 
+export interface RawAudioTrack {
+  id: string;
+  title: string;
+  url: string;
+  language?: string;
+  default?: boolean;
+}
+
 export interface RawBulletCommentTrack {
   id: string;
   title: string;
@@ -56,6 +73,8 @@ export interface RawVideo {
   posterUrl?: string;
   autoDisplaySubtitles?: boolean;
   subtitles?: RawSubtitleTrack[];
+  "audio-tracks"?: RawAudioTrack[];
+  audioTracks?: RawAudioTrack[];
   "bullet-comments"?: RawBulletCommentTrack[];
   bulletComments?: RawBulletCommentTrack[];
 }

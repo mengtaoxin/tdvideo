@@ -5,10 +5,16 @@ import { Video, VideoPlayer, VideoSkin } from "@videojs/react/video";
 import "@videojs/react/video/skin.css";
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
-import { selectDefaultSubtitle, type SubtitleTrack } from "@/lib/configs";
+import {
+  EMBEDDED_AUDIO_ID,
+  selectDefaultSubtitle,
+  type AudioTrackConfig,
+  type SubtitleTrack,
+} from "@/lib/configs";
 import { availableStageHeight, fitStageSize, isHlsUrl, type BulletComment } from "@/lib/playback";
 
 import { BulletCommentOverlay } from "./BulletCommentOverlay";
+import { ExternalAudioSidecar } from "./ExternalAudioSidecar";
 import { HistoryProgressSync, HistoryResumeSeek, type HistoryTarget } from "./HistoryProgressSync";
 import { PlaybackControls } from "./PlaybackControls";
 
@@ -46,6 +52,10 @@ export function VideoJsStage({
   title,
   subtitles,
   autoDisplaySubtitles,
+  audioTracks,
+  selectedAudioId,
+  onSelectedAudioIdChange,
+  onExternalAudioError,
   bulletComments,
   bulletCommentsEnabled,
   onBulletCommentsEnabledChange,
@@ -57,6 +67,10 @@ export function VideoJsStage({
   title: string;
   subtitles: readonly SubtitleTrack[];
   autoDisplaySubtitles: boolean;
+  audioTracks: readonly AudioTrackConfig[];
+  selectedAudioId: string;
+  onSelectedAudioIdChange: (id: string) => void;
+  onExternalAudioError: (message: string) => void;
   bulletComments: readonly BulletComment[];
   bulletCommentsEnabled: boolean;
   onBulletCommentsEnabledChange: (enabled: boolean) => void;
@@ -147,10 +161,23 @@ export function VideoJsStage({
       ? { width: "100%", aspectRatio: "16 / 9" }
       : { width: frameSize.width, height: frameSize.height };
 
+  const externalSrc =
+    selectedAudioId === EMBEDDED_AUDIO_ID
+      ? undefined
+      : audioTracks.find((track) => track.id === selectedAudioId)?.url;
+
   return (
     <VideoPlayer key={src} title={title}>
       <HistoryProgressSync key={historyTargetKey(historyTarget)} target={historyTarget} />
       <HistoryResumeSeek key={`resume:${resumeProgress}`} progress={resumeProgress} />
+      <ExternalAudioSidecar
+        selectedId={selectedAudioId}
+        src={externalSrc}
+        onLoadError={(message) => {
+          onExternalAudioError(message);
+          onSelectedAudioIdChange(EMBEDDED_AUDIO_ID);
+        }}
+      />
       <Box
         ref={widthRef}
         sx={{
@@ -181,6 +208,9 @@ export function VideoJsStage({
           bulletCommentsEnabled={bulletCommentsEnabled}
           onBulletCommentsEnabledChange={onBulletCommentsEnabledChange}
           hasBulletComments={hasBulletCommentTrack}
+          audioTracks={audioTracks}
+          selectedAudioId={selectedAudioId}
+          onSelectedAudioIdChange={onSelectedAudioIdChange}
         />
       </Box>
     </VideoPlayer>
