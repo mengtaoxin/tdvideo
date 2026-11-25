@@ -17,6 +17,13 @@
       "computedHash": "545489140c69bf32e3b57a4eb747645e65c5aed701e8da04389dd0b3c843ddf2",
       "installMode": "copy"
     },
+    "make-spec": {
+      "source": "mengtaoxin/agent-kit",
+      "commit": "71e9067b6a2140569dbb8bb8a43809e0cfdc9aa3",
+      "sourceType": "github",
+      "skillPath": "skills/make-spec/SKILL.md",
+      "computedHash": "eaad05ce28c4743cca399b425b00a6a4342c02c918e122802620cfe2a20e68af"
+    },
     "port-and-process-management": {
       "source": "mengtaoxin/agent-kit",
       "commit": "80dd2c75926f66ad71f56b8f10c1ba78f5952140",
