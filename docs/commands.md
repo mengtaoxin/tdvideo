@@ -46,4 +46,4 @@ Production hosting on Vercel via GitHub Actions: see [deployment.md](./deploymen
 npx evolving explain
 ```
 
-Progressive stages live in `evolving.yml` (orient → edit → prepare → verify → docs). After edits: `npx evolving run prepare`, then `npx evolving run verify`. On failure or a truncated view: `npx evolving status`.
+Progressive stages live in `evolving.yml` (orient → edit → prepare → verify). After edits: `npx evolving run prepare`, then `npx evolving run verify`. On failure or a truncated view: `npx evolving status`.
