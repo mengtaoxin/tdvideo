@@ -45,12 +45,3 @@ stages:
         command: ["npm", "run", "--silent", "test:coverage"]
       - name: test:e2e
         command: ["npm", "run", "--silent", "test:e2e"]
-
-  - id: docs
-    summary: >-
-      Update the doc that owns the changed contract. Prefer existing docs under docs/;
-      do not mirror code lists — describe what is supported.
-    refs:
-      - docs/file-structure.md
-      - docs/commands.md
-      - docs/testing.md
